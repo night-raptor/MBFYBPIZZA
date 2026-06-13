@@ -772,9 +772,9 @@ footer{
 
 /* ── MOBILE ── */
 @media(max-width:768px){
-  /* header: show just the centered pizza mark, hide the wordmark */
-  header{padding:0 14px;height:54px;gap:8px;}
-  .logo{position:absolute;left:50%;transform:translateX(-50%);gap:0;}
+  /* header: pizza mark in the left corner, buttons grouped on the right */
+  header{padding:0 14px;height:54px;gap:10px;}
+  .logo{gap:0;flex-shrink:0;}
   .logo-word{display:none;}
   .logo-mark{width:30px;height:30px;}
   .hdr-btns{gap:6px;flex-shrink:0;margin-left:auto;}
