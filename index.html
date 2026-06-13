@@ -1,0 +1,2004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MORE BANG FOR YOUR BUCK PIZZA</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2308080F'/%3E%3Cg fill='none' stroke='%23FF2D78' stroke-width='3' stroke-linejoin='round'%3E%3Cpath d='M32 8 L18 50 L46 50 Z'/%3E%3Cpath d='M18 50 Q32 58 46 50'/%3E%3C/g%3E%3Cg fill='%23FF2D78'%3E%3Ccircle cx='32' cy='28' r='2.6'/%3E%3Ccircle cx='26' cy='40' r='2.2'/%3E%3Ccircle cx='38' cy='40' r='2.2'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black:   #08080F;
+  --deep:    #0C0C18;
+  --panel:   #10101E;
+  --panel2:  #16162A;
+  --pink:    #FF2D78;
+  --blue:    #00CFFF;
+  --white:   #E8E8F4;
+  --dim:     #666680;
+  --border-p: rgba(255,45,120,0.25);
+  --border-b: rgba(0,207,255,0.25);
+  --checker-a: #131320;
+  --checker-b: #0C0C18;
+  --font-d: 'VT323', monospace;
+  --font-m: 'Share Tech Mono', monospace;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+
+body{
+  font-family:var(--font-m);
+  background:var(--black);
+  color:var(--white);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* scanlines */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.06) 3px,rgba(0,0,0,0.06) 4px);
+  pointer-events:none;
+  z-index:9999;
+}
+
+/* ── ASTEROIDS BACKGROUND ── */
+#asteroids-bg{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:0;
+  pointer-events:none;
+  opacity:.62;
+}
+/* keep all real content above the game layer */
+.marquee,header,.hero,.filter-bar,.main,.calc-strip,.digest,footer,.overlay,.toast{
+  position:relative;
+  z-index:1;
+}
+header{z-index:100;}
+.overlay{z-index:500;}
+.toast{z-index:999;}
+
+/* ── MARQUEE ── */
+.marquee{
+  background:var(--pink);
+  padding:5px 0;
+  overflow:hidden;
+  white-space:nowrap;
+  font-family:var(--font-d);
+  font-size:17px;
+  letter-spacing:.08em;
+  color:var(--black);
+  display:flex;
+}
+.marquee-track{
+  display:flex;
+  flex-shrink:0;
+  animation:scroll 45s linear infinite;
+  will-change:transform;
+}
+.marquee-seg{
+  flex-shrink:0;
+  white-space:nowrap;
+  padding-right:0;
+}
+@keyframes scroll{from{transform:translate3d(0,0,0);}to{transform:translate3d(-50%,0,0);}}
+
+/* ── HEADER ── */
+header{
+  background:var(--panel);
+  border-bottom:2px solid var(--pink);
+  box-shadow:0 0 18px rgba(255,45,120,0.15);
+  padding:0 28px;
+  height:58px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+}
+
+.logo{
+  font-family:var(--font-d);
+  font-size:30px;
+  color:var(--pink);
+  text-shadow:0 0 12px rgba(255,45,120,0.5);
+  letter-spacing:.04em;
+  animation:flicker 9s infinite;
+}
+@keyframes flicker{0%,92%,94%,100%{opacity:1;}93%{opacity:.6;}}
+
+.hdr-btns{display:flex;gap:8px;}
+.hbtn{
+  font-family:var(--font-d);
+  font-size:18px;
+  letter-spacing:.04em;
+  padding:6px 14px;
+  background:none;
+  border:1px solid var(--border-b);
+  color:var(--blue);
+  cursor:pointer;
+  transition:all .15s;
+}
+.hbtn:hover{background:rgba(0,207,255,.08);border-color:var(--blue);box-shadow:0 0 10px rgba(0,207,255,.25);}
+.hbtn.pink{border-color:var(--border-p);color:var(--pink);}
+.hbtn.pink:hover{background:rgba(255,45,120,.08);border-color:var(--pink);box-shadow:0 0 10px rgba(255,45,120,.25);}
+
+/* ── HERO ── */
+.hero{
+  background:
+    repeating-conic-gradient(rgba(19,19,32,.72) 0% 25%,rgba(12,12,24,.72) 0% 50%)
+    0 0/40px 40px;
+  padding:52px 28px 44px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  border-bottom:2px solid var(--blue);
+}
+.hero::after{
+  content:'';
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 70% at 50% 50%,rgba(255,45,120,.05) 0%,transparent 70%);
+  pointer-events:none;
+}
+
+.hero-eyebrow{
+  font-size:11px;
+  color:var(--blue);
+  text-shadow:0 0 8px rgba(0,207,255,.5);
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  margin-bottom:14px;
+}
+
+.hero-title{
+  font-family:var(--font-d);
+  font-size:clamp(56px,9vw,96px);
+  line-height:.92;
+  margin-bottom:16px;
+  position:relative;z-index:1;
+}
+.hero-title .l1{display:block;color:var(--pink);text-shadow:0 0 14px rgba(255,45,120,.5),3px 3px 0 #5a0025;}
+.hero-title .l2{display:block;color:var(--blue);text-shadow:0 0 14px rgba(0,207,255,.4),3px 3px 0 #003850;}
+.hero-title .l3{display:block;color:var(--white);font-size:.55em;letter-spacing:.06em;margin-top:6px;}
+
+.hero-sub{
+  font-size:12px;
+  color:var(--dim);
+  letter-spacing:.07em;
+  margin-bottom:28px;
+  position:relative;z-index:1;
+}
+
+/* search */
+.search-wrap{
+  max-width:560px;
+  margin:0 auto;
+  display:flex;
+  align-items:stretch;
+  border:2px solid var(--blue);
+  box-shadow:0 0 18px rgba(0,207,255,.2);
+  position:relative;z-index:1;
+  overflow:hidden;
+}
+.search-in{
+  flex:1;
+  min-width:0;
+  background:rgba(0,0,0,.6);
+  border:none;
+  padding:13px 16px;
+  font-family:var(--font-m);
+  font-size:14px;
+  color:var(--blue);
+  outline:none;
+  letter-spacing:.05em;
+}
+.search-in::placeholder{color:rgba(0,207,255,.3);}
+.search-btn{
+  background:var(--pink);
+  color:var(--black);
+  border:none;
+  padding:13px 22px;
+  font-family:var(--font-d);
+  font-size:22px;
+  letter-spacing:.04em;
+  cursor:pointer;
+  transition:all .15s;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+.search-btn:hover{background:#ff5599;box-shadow:0 0 16px rgba(255,45,120,.5);}
+
+.gps-btn{
+  background:rgba(0,207,255,.06);
+  border:none;
+  border-left:1px solid rgba(0,207,255,.2);
+  border-right:1px solid rgba(0,207,255,.2);
+  color:var(--blue);
+  padding:0 16px;
+  font-size:18px;
+  cursor:pointer;
+  transition:all .15s;
+  white-space:nowrap;
+  flex-shrink:0;
+  display:flex;align-items:center;
+}
+.gps-btn:hover{background:rgba(0,207,255,.15);color:#fff;}
+.gps-btn.locating{animation:gps-pulse 1s infinite;}
+@keyframes gps-pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+.gps-btn.located{color:var(--blue);text-shadow:0 0 8px rgba(0,207,255,.6);}
+.gps-hint{
+  font-size:10px;color:var(--dim);letter-spacing:.07em;
+  margin-top:7px;text-align:center;
+  min-height:14px;
+}
+.gps-hint.err{color:var(--pink);}
+.gps-hint.ok{color:var(--blue);}
+
+/* ── FILTER BAR ── */
+.filter-bar{
+  background:var(--panel);
+  border-bottom:1px solid rgba(255,255,255,.06);
+  padding:0 20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:0 4px;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+.filter-bar::-webkit-scrollbar{display:none;}
+.ftab{
+  background:none;border:none;
+  border-bottom:2px solid transparent;
+  padding:11px 16px;
+  font-family:var(--font-m);font-size:11px;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--dim);cursor:pointer;
+  white-space:nowrap;transition:all .15s;
+}
+.ftab:hover{color:var(--white);}
+.ftab.active{color:var(--blue);border-bottom-color:var(--blue);}
+.ftab.stuffed.active{color:var(--pink);border-bottom-color:var(--pink);}
+
+.sort-sel{
+  align-self:center;
+  margin-left:8px;
+  background:var(--panel2);
+  border:1px solid var(--border-b);
+  color:var(--blue);
+  font-family:var(--font-m);font-size:11px;
+  padding:5px 10px;cursor:pointer;
+  letter-spacing:.06em;
+}
+
+/* ── MAIN ── */
+.main{
+  max-width:1080px;
+  margin:0 auto;
+  padding:24px 20px;
+  display:grid;
+  grid-template-columns:256px 1fr;
+  gap:20px;
+  align-items:start;
+}
+
+/* ── SIDEBAR ── */
+.sidebar{display:flex;flex-direction:column;gap:14px;}
+
+.panel{
+  background:var(--panel);
+  border:1px solid var(--border-b);
+  padding:16px 18px;
+}
+.panel.pink-border{border-color:var(--border-p);}
+
+.panel-title{
+  font-family:var(--font-d);
+  font-size:22px;
+  letter-spacing:.04em;
+  margin-bottom:14px;
+  padding-bottom:8px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.panel-title.blue{color:var(--blue);text-shadow:0 0 8px rgba(0,207,255,.3);}
+.panel-title.pink{color:var(--pink);text-shadow:0 0 8px rgba(255,45,120,.3);}
+
+/* ── REWARDS LOGIN PANEL ── */
+.chain-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 0;
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+.chain-row:last-child{border-bottom:none;}
+.chain-left{display:flex;align-items:center;gap:10px;}
+.chain-icon{font-size:20px;}
+.chain-name{font-size:13px;color:var(--white);letter-spacing:.04em;}
+.chain-sub{font-size:10px;letter-spacing:.05em;margin-top:2px;}
+.chain-sub.linked{color:var(--blue);text-shadow:0 0 6px rgba(0,207,255,.4);}
+.chain-sub.idle{color:var(--dim);}
+
+.chain-btn{
+  font-family:var(--font-d);font-size:16px;
+  letter-spacing:.04em;
+  padding:5px 12px;
+  background:none;
+  border:1px solid var(--border-p);
+  color:var(--pink);
+  cursor:pointer;
+  transition:all .15s;
+  white-space:nowrap;
+}
+.chain-btn:hover{background:rgba(255,45,120,.1);border-color:var(--pink);box-shadow:0 0 8px rgba(255,45,120,.3);}
+.chain-btn.linked{
+  color:var(--blue);
+  border-color:var(--border-b);
+}
+.chain-btn.linked:hover{background:rgba(0,207,255,.08);border-color:var(--blue);}
+
+.rewards-hint{
+  margin-top:12px;
+  padding:8px 10px;
+  background:rgba(0,207,255,.05);
+  border:1px solid rgba(0,207,255,.12);
+  font-size:10px;
+  color:var(--dim);
+  letter-spacing:.05em;
+  line-height:1.6;
+}
+.rewards-hint strong{color:var(--blue);}
+
+/* ── PREFS ── */
+.pref-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.pref-lbl{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.07em;}
+
+.tog{position:relative;width:36px;height:20px;}
+.tog input{opacity:0;width:0;height:0;}
+.tog-sl{
+  position:absolute;inset:0;
+  background:#1e1e32;
+  border:1px solid rgba(255,255,255,.1);
+  cursor:pointer;transition:all .2s;
+}
+.tog-sl::before{
+  content:'';position:absolute;
+  width:14px;height:14px;left:2px;top:2px;
+  background:var(--dim);transition:all .2s;
+}
+.tog input:checked+.tog-sl{background:rgba(0,207,255,.12);border-color:rgba(0,207,255,.4);}
+.tog input:checked+.tog-sl::before{transform:translateX(16px);background:var(--blue);box-shadow:0 0 6px var(--blue);}
+
+.sl-row{margin-bottom:12px;}
+.sl-lbl{display:flex;justify-content:space-between;font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px;}
+.sl-val{color:var(--pink);}
+input[type=range]{width:100%;accent-color:var(--pink);}
+
+/* size comp */
+.comp-group-lbl{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+.comp-pair{display:flex;gap:6px;margin-bottom:8px;}
+.comp-in{
+  flex:1;background:var(--panel2);
+  border:1px solid var(--border-b);
+  color:var(--blue);font-family:var(--font-m);
+  font-size:13px;padding:6px 8px;outline:none;
+  transition:border-color .15s;
+}
+.comp-in:focus{border-color:var(--blue);box-shadow:0 0 6px rgba(0,207,255,.25);}
+.comp-result{
+  margin-top:4px;padding:9px 10px;
+  background:rgba(0,207,255,.05);
+  border:1px solid rgba(0,207,255,.15);
+  font-size:10px;color:var(--blue);
+  text-align:center;line-height:1.6;
+  min-height:42px;display:flex;align-items:center;justify-content:center;
+}
+
+/* AI panel */
+.ai-panel{
+  background:var(--panel);
+  border:1px solid rgba(255,45,120,.2);
+  padding:16px 18px;
+}
+.ai-ta{
+  width:100%;background:var(--panel2);
+  border:1px solid var(--border-p);
+  color:var(--white);font-family:var(--font-m);
+  font-size:11px;padding:8px 10px;
+  resize:none;height:56px;outline:none;
+  margin-bottom:8px;transition:border-color .15s;
+  letter-spacing:.03em;
+}
+.ai-ta:focus{border-color:var(--pink);box-shadow:0 0 6px rgba(255,45,120,.2);}
+.ai-btn{
+  width:100%;background:var(--pink);color:var(--black);
+  border:none;padding:8px;font-family:var(--font-d);
+  font-size:20px;letter-spacing:.04em;cursor:pointer;transition:all .15s;
+}
+.ai-btn:hover{background:#ff5599;box-shadow:0 0 12px rgba(255,45,120,.4);}
+.ai-btn:disabled{opacity:.5;cursor:not-allowed;}
+.ai-out{
+  display:none;margin-top:10px;padding:10px;
+  background:rgba(255,45,120,.04);
+  border:1px solid rgba(255,45,120,.15);
+  font-size:11px;color:var(--white);
+  line-height:1.6;letter-spacing:.03em;
+}
+.ai-out.on{display:block;}
+.ai-cursor{display:inline-block;width:7px;height:13px;background:var(--pink);animation:blink 1s infinite;vertical-align:middle;margin-left:2px;}
+@keyframes blink{0%,49%{opacity:1;}50%,100%{opacity:0;}}
+
+/* ── DEALS AREA ── */
+.deals-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:14px;
+}
+.deals-hdr-l{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;}
+.deals-hdr-l strong{color:var(--blue);}
+.live-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:10px;color:var(--blue);text-transform:uppercase;letter-spacing:.1em;
+}
+.live-badge::before{
+  content:'';width:7px;height:7px;
+  background:var(--blue);border-radius:50%;
+  box-shadow:0 0 6px var(--blue);
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.8);}}
+
+/* best banner */
+.best-banner{
+  background:var(--panel);
+  border:2px solid var(--pink);
+  box-shadow:0 0 20px rgba(255,45,120,.15);
+  padding:16px 20px;
+  display:flex;align-items:center;gap:16px;
+  margin-bottom:14px;
+  position:relative;overflow:hidden;
+}
+.best-banner::after{
+  content:'BEST DEAL';
+  position:absolute;top:-4px;right:-28px;
+  background:var(--pink);
+  color:var(--black);
+  font-family:var(--font-d);font-size:14px;
+  letter-spacing:.08em;
+  padding:4px 44px;
+  transform:rotate(12deg);
+}
+.best-label{font-size:10px;color:var(--pink);text-transform:uppercase;letter-spacing:.14em;margin-bottom:4px;}
+.best-name{font-family:var(--font-d);font-size:26px;color:var(--white);letter-spacing:.03em;line-height:1;}
+.best-detail{font-size:10px;color:var(--dim);margin-top:3px;letter-spacing:.05em;}
+.best-price-col{margin-left:auto;text-align:right;flex-shrink:0;}
+.best-price{font-family:var(--font-d);font-size:44px;color:var(--pink);text-shadow:0 0 10px rgba(255,45,120,.4);line-height:1;}
+.best-per{font-size:10px;color:var(--dim);letter-spacing:.05em;}
+.btn-order{
+  font-family:var(--font-d);font-size:20px;
+  letter-spacing:.04em;padding:10px 18px;
+  background:var(--pink);color:var(--black);
+  border:none;cursor:pointer;
+  transition:all .15s;white-space:nowrap;flex-shrink:0;
+}
+.btn-order:hover{background:#ff5599;box-shadow:0 0 14px rgba(255,45,120,.5);}
+
+/* deal card */
+.deals-list{display:flex;flex-direction:column;gap:8px;}
+.card{
+  background:var(--panel);
+  border:1px solid rgba(255,255,255,.06);
+  padding:13px 16px;
+  display:grid;
+  grid-template-columns:42px 1fr auto auto;
+  align-items:center;gap:12px;
+  cursor:pointer;
+  transition:all .15s;
+  position:relative;
+}
+.card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:transparent;transition:background .15s;}
+.card:hover{border-color:rgba(0,207,255,.2);background:var(--panel2);}
+.card:hover::before{background:var(--blue);}
+.card.top{border-color:rgba(255,45,120,.25);}
+.card.top::before{background:var(--pink);}
+
+.rank{font-family:var(--font-d);font-size:30px;color:var(--dim);text-align:center;line-height:1;}
+.rank.r1{color:var(--pink);text-shadow:0 0 8px rgba(255,45,120,.4);}
+.rank.r2{color:#A0A0C0;}
+.rank.r3{color:#8080A8;}
+
+.c-meta{min-width:0;}
+.c-place{
+  font-family:var(--font-d);font-size:20px;color:var(--white);
+  display:flex;align-items:center;gap:8px;margin-bottom:2px;
+}
+.badge{
+  font-family:var(--font-m);font-size:9px;letter-spacing:.07em;
+  padding:2px 6px;text-transform:uppercase;border:1px solid;
+}
+.badge.chain{color:var(--pink);border-color:rgba(255,45,120,.3);background:rgba(255,45,120,.07);}
+.badge.local{color:var(--blue);border-color:rgba(0,207,255,.25);background:rgba(0,207,255,.06);}
+
+.c-desc{font-size:10px;color:var(--dim);letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.c-tags{display:flex;gap:5px;margin-top:5px;flex-wrap:wrap;}
+.tag{
+  font-size:9px;padding:2px 7px;letter-spacing:.06em;
+  text-transform:uppercase;border:1px solid;
+}
+.tag.delivery{color:rgba(160,120,255,1);border-color:rgba(160,120,255,.25);background:rgba(160,120,255,.07);}
+.tag.carryout{color:var(--blue);border-color:rgba(0,207,255,.2);background:rgba(0,207,255,.05);}
+.tag.online{color:var(--blue);border-color:rgba(0,207,255,.2);background:rgba(0,207,255,.05);}
+.tag.rewards{color:var(--pink);border-color:rgba(255,45,120,.25);background:rgba(255,45,120,.06);}
+.tag.deal{color:var(--pink);border-color:rgba(255,45,120,.2);background:rgba(255,45,120,.05);}
+.tag.stuffed{color:var(--pink);border-color:rgba(255,45,120,.4);background:rgba(255,45,120,.1);}
+
+.c-price-col{text-align:right;min-width:88px;}
+.c-price{font-family:var(--font-d);font-size:28px;color:var(--white);line-height:1;}
+.c-cpsi{font-size:9px;color:var(--dim);letter-spacing:.04em;}
+.c-save{font-size:10px;color:var(--blue);margin-top:2px;}
+
+.c-btns{display:flex;flex-direction:column;gap:5px;}
+.btn-go{
+  font-family:var(--font-d);font-size:16px;letter-spacing:.04em;
+  padding:6px 12px;background:var(--pink);color:var(--black);
+  border:none;cursor:pointer;transition:all .15s;white-space:nowrap;
+}
+.btn-go:hover{background:#ff5599;box-shadow:0 0 8px rgba(255,45,120,.4);}
+.btn-save{
+  font-size:9px;padding:5px 12px;background:none;
+  border:1px solid rgba(255,255,255,.1);color:var(--dim);
+  cursor:pointer;transition:all .15s;text-transform:uppercase;letter-spacing:.06em;
+}
+.btn-save:hover{border-color:var(--blue);color:var(--blue);}
+
+/* ── CPSI CALC ── */
+.calc-strip{
+  background:var(--panel2);
+  border-top:2px solid var(--blue);
+  border-bottom:2px solid var(--blue);
+  padding:28px 24px;text-align:center;
+}
+.calc-title{font-family:var(--font-d);font-size:30px;color:var(--blue);text-shadow:0 0 10px rgba(0,207,255,.4);letter-spacing:.04em;margin-bottom:4px;}
+.calc-hint{font-size:10px;color:var(--dim);letter-spacing:.08em;margin-bottom:20px;}
+.calc-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:16px;}
+.calc-field label{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:5px;}
+.calc-in{
+  background:var(--panel);border:1px solid var(--border-b);
+  color:var(--blue);font-family:var(--font-m);font-size:16px;
+  padding:8px 12px;width:130px;outline:none;transition:border-color .15s;
+}
+.calc-in:focus{border-color:var(--blue);box-shadow:0 0 8px rgba(0,207,255,.2);}
+.calc-readout{
+  display:inline-flex;gap:24px;align-items:center;
+  border:2px solid var(--blue);
+  box-shadow:0 0 16px rgba(0,207,255,.12);
+  padding:12px 28px;
+}
+.calc-readout-lbl{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;}
+.calc-readout-val{font-family:var(--font-d);font-size:34px;color:var(--blue);text-shadow:0 0 8px rgba(0,207,255,.4);line-height:1;}
+.calc-scale{font-size:10px;color:var(--dim);margin-top:10px;letter-spacing:.06em;}
+.calc-scale span{margin:0 8px;}
+.g{color:var(--blue);} .p{color:var(--pink);}
+
+/* ── DIGEST ── */
+.digest{
+  background:
+    repeating-conic-gradient(var(--checker-a) 0% 25%,var(--checker-b) 0% 50%)
+    0 0/28px 28px;
+  border-top:2px solid var(--pink);
+  padding:36px 24px;text-align:center;
+  position:relative;
+}
+.digest::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 70% at 50% 50%,rgba(255,45,120,.05) 0%,transparent 70%);
+  pointer-events:none;
+}
+.digest-title{font-family:var(--font-d);font-size:34px;color:var(--pink);text-shadow:0 0 12px rgba(255,45,120,.5);letter-spacing:.04em;margin-bottom:6px;position:relative;z-index:1;}
+.digest-sub{font-size:11px;color:var(--dim);letter-spacing:.07em;margin-bottom:22px;position:relative;z-index:1;}
+.digest-form{
+  max-width:460px;margin:0 auto;
+  display:flex;border:2px solid var(--pink);
+  box-shadow:0 0 16px rgba(255,45,120,.15);
+  position:relative;z-index:1;
+}
+.digest-in{
+  flex:1;background:rgba(0,0,0,.6);border:none;
+  padding:12px 16px;font-family:var(--font-m);font-size:13px;
+  color:var(--pink);outline:none;letter-spacing:.04em;
+}
+.digest-in::placeholder{color:rgba(255,45,120,.3);}
+.digest-btn{
+  background:var(--pink);color:var(--black);border:none;
+  padding:12px 22px;font-family:var(--font-d);font-size:22px;
+  letter-spacing:.04em;cursor:pointer;transition:all .15s;white-space:nowrap;
+}
+.digest-btn:hover{background:#ff5599;box-shadow:0 0 14px rgba(255,45,120,.4);}
+.digest-perks{
+  display:flex;gap:20px;justify-content:center;
+  margin-top:14px;flex-wrap:wrap;
+  position:relative;z-index:1;
+}
+.digest-perk{font-size:10px;color:var(--dim);letter-spacing:.06em;}
+.digest-perk::before{content:'▸ ';color:var(--blue);}
+
+/* ── FOOTER ── */
+footer{
+  background:var(--deep);
+  border-top:1px solid rgba(255,255,255,.04);
+  padding:22px;text-align:center;
+}
+.footer-logo{font-family:var(--font-d);font-size:20px;color:var(--pink);letter-spacing:.04em;margin-bottom:6px;}
+.footer-note{font-size:10px;color:#333;letter-spacing:.05em;}
+.footer-links{display:flex;gap:18px;justify-content:center;margin-top:10px;flex-wrap:wrap;}
+.footer-links a{font-size:10px;color:#444;text-decoration:none;letter-spacing:.07em;text-transform:uppercase;transition:color .15s;}
+.footer-links a:hover{color:var(--blue);}
+
+/* ── MODALS ── */
+.overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.85);z-index:500;
+  align-items:center;justify-content:center;padding:20px;
+}
+.overlay.open{display:flex;}
+
+.modal{
+  background:var(--panel);
+  border:2px solid var(--blue);
+  box-shadow:0 0 30px rgba(0,207,255,.15);
+  max-width:480px;width:100%;
+  max-height:90vh;overflow-y:auto;
+}
+.modal.pink-modal{border-color:var(--pink);box-shadow:0 0 30px rgba(255,45,120,.15);}
+.modal.sm{max-width:380px;}
+
+.m-hdr{
+  background:var(--deep);
+  border-bottom:1px solid rgba(255,255,255,.06);
+  padding:16px 20px;
+  display:flex;justify-content:space-between;align-items:flex-start;
+}
+.m-title{font-family:var(--font-d);font-size:26px;letter-spacing:.04em;}
+.m-title.blue{color:var(--blue);}
+.m-title.pink{color:var(--pink);}
+.m-price{font-family:var(--font-d);font-size:32px;color:var(--pink);line-height:1;}
+.m-close{
+  background:none;border:none;
+  color:var(--dim);font-family:var(--font-d);font-size:22px;
+  cursor:pointer;padding:0;line-height:1;
+}
+.m-close:hover{color:var(--pink);}
+
+.m-body{padding:18px 20px;}
+
+/* reward info modal */
+.ri-balance{
+  border:2px solid var(--pink);
+  box-shadow:0 0 14px rgba(255,45,120,.12) inset;
+  padding:14px 16px;
+  text-align:center;
+  margin-bottom:16px;
+}
+.ri-balance-lbl{font-size:10px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.ri-balance-val{font-family:var(--font-d);font-size:42px;color:var(--pink);text-shadow:0 0 12px rgba(255,45,120,.5);line-height:1;}
+.ri-balance-next{font-size:10px;color:var(--blue);letter-spacing:.06em;margin-top:6px;min-height:13px;}
+.ri-section-lbl{font-size:10px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;}
+
+.tier-row{
+  display:grid;
+  grid-template-columns:64px 1fr auto;
+  align-items:center;
+  gap:10px;
+  padding:9px 10px;
+  margin-bottom:6px;
+  border:1px solid rgba(255,255,255,.08);
+  background:var(--panel2);
+}
+.tier-row.ready{border-color:rgba(0,207,255,.4);background:rgba(0,207,255,.06);}
+.tier-cost{font-family:var(--font-d);font-size:18px;color:var(--pink);line-height:1;}
+.tier-row.ready .tier-cost{color:var(--blue);}
+.tier-item{font-size:11px;color:var(--white);letter-spacing:.03em;line-height:1.3;}
+.tier-status{font-size:9px;letter-spacing:.08em;color:var(--dim);text-transform:uppercase;white-space:nowrap;}
+.tier-row.ready .tier-status{color:var(--blue);text-shadow:0 0 6px rgba(0,207,255,.4);}
+
+.val-bar-wrap{margin-bottom:16px;}
+.val-bar-lbl{display:flex;justify-content:space-between;font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;}
+.val-bar-score{color:var(--pink);}
+.val-track{height:7px;background:#1e1e32;border:1px solid rgba(255,255,255,.06);}
+.val-fill{height:100%;background:linear-gradient(90deg,var(--pink),var(--blue));transition:width .5s ease;}
+
+.m-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:12px;
+}
+.m-row:last-of-type{border-bottom:none;}
+.m-row label{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;}
+.m-row strong{font-size:11px;color:var(--white);letter-spacing:.04em;}
+
+.m-cta{display:flex;gap:8px;margin-top:16px;}
+.m-cta .btn-go{flex:1;padding:12px;font-size:22px;text-align:center;}
+
+/* connect form */
+.c-in{
+  width:100%;background:var(--panel2);
+  border:1px solid var(--border-b);
+  color:var(--white);font-family:var(--font-m);font-size:13px;
+  padding:10px 12px;outline:none;margin-bottom:8px;
+  transition:border-color .15s;letter-spacing:.03em;
+}
+.c-in:focus{border-color:var(--blue);box-shadow:0 0 6px rgba(0,207,255,.2);}
+.c-note{font-size:10px;color:var(--dim);letter-spacing:.04em;line-height:1.6;margin-bottom:14px;}
+.c-note strong{color:var(--blue);}
+
+/* toast */
+.toast{
+  position:fixed;bottom:20px;right:20px;
+  background:var(--panel);border:1px solid var(--blue);
+  box-shadow:0 0 14px rgba(0,207,255,.25);
+  padding:10px 16px;
+  font-size:11px;color:var(--blue);letter-spacing:.07em;
+  z-index:999;display:none;
+  animation:slideIn .2s ease;
+}
+@keyframes slideIn{from{transform:translateX(40px);opacity:0;}to{transform:translateX(0);opacity:1;}}
+
+/* responsive */
+@media(max-width:768px){
+  .main{grid-template-columns:1fr;}
+  .sidebar{display:none;}
+  .card{grid-template-columns:36px 1fr auto;}
+  .c-btns{display:none;}
+  .best-banner{flex-wrap:wrap;}
+  .best-banner::after{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- ASTEROIDS BACKGROUND GAME -->
+<canvas id="asteroids-bg"></canvas>
+
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="marquee-track">
+    <span class="marquee-seg">🍕 DOMINO'S MIX & MATCH $5.99 &nbsp;★&nbsp; GIORDANO'S TUESDAY SPECIAL $11.99 &nbsp;★&nbsp; LITTLE CAESARS HOT-N-READY $8.99 &nbsp;★&nbsp; CONNECT YOUR REWARDS FOR MEMBER PRICING &nbsp;★&nbsp; RANKED BY COST PER SQUARE INCH &nbsp;★&nbsp;&nbsp;</span>
+    <span class="marquee-seg" aria-hidden="true">🍕 DOMINO'S MIX & MATCH $5.99 &nbsp;★&nbsp; GIORDANO'S TUESDAY SPECIAL $11.99 &nbsp;★&nbsp; LITTLE CAESARS HOT-N-READY $8.99 &nbsp;★&nbsp; CONNECT YOUR REWARDS FOR MEMBER PRICING &nbsp;★&nbsp; RANKED BY COST PER SQUARE INCH &nbsp;★&nbsp;&nbsp;</span>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">🍕 MORE BANG FOR YOUR BUCK PIZZA</div>
+  <div class="hdr-btns">
+    <button class="hbtn" onclick="openM('aboutM')">[ HOW IT WORKS ]</button>
+    <button class="hbtn pink" onclick="openM('alertM')">[ 🔔 PRICE ALERT ]</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">▸ REAL-TIME PRICES · CHAINS + LOCAL SPOTS · RANKED BY VALUE ◂</div>
+  <h1 class="hero-title">
+    <span class="l1">MORE BANG</span>
+    <span class="l2">FOR YOUR BUCK</span>
+    <span class="l3">PIZZA.COM</span>
+  </h1>
+  <p class="hero-sub">EVERY PIZZA DEAL IN YOUR AREA, RANKED BY COST PER SQUARE INCH</p>
+  <div class="search-wrap">
+    <input class="search-in" id="locIn" type="text" placeholder="ENTER YOUR ZIP OR ADDRESS..." value="">
+    <button class="gps-btn" id="gpsBtn" onclick="useGPS()" title="Use my current location (GPS)">📍</button>
+    <button class="search-btn" onclick="runSearch()">FIND DEALS ▸</button>
+  </div>
+  <div class="gps-hint" id="gpsHint">▸ TAP 📍 TO USE YOUR GPS LOCATION FOR MORE ACCURATE DEALS</div>
+</div>
+
+<!-- FILTERS -->
+<div class="filter-bar">
+  <button class="ftab active" onclick="setF(this,'all')">ALL DEALS</button>
+  <button class="ftab" onclick="setF(this,'chain')">CHAINS</button>
+  <button class="ftab" onclick="setF(this,'local')">LOCAL SPOTS</button>
+  <button class="ftab" onclick="setF(this,'delivery')">DELIVERY</button>
+  <button class="ftab" onclick="setF(this,'carryout')">CARRYOUT</button>
+  <button class="ftab" onclick="setF(this,'online')">ONLINE ONLY</button>
+  <button class="ftab" onclick="setF(this,'rewards')">REWARDS DEALS</button>
+  <button class="ftab stuffed" onclick="setF(this,'stuffed')">🧀 STUFFED CRUST</button>
+  <select class="sort-sel" onchange="sortD(this.value)">
+    <option value="value">BEST VALUE</option>
+    <option value="price">LOWEST PRICE</option>
+    <option value="size">LARGEST PIZZA</option>
+    <option value="distance">NEAREST</option>
+    <option value="rating">TOP RATED</option>
+  </select>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <!-- REWARDS — manual entry, stored on this device -->
+    <div class="panel pink-border">
+      <div class="panel-title pink">★ MY REWARDS</div>
+      <p style="font-size:10px;color:var(--dim);letter-spacing:.05em;line-height:1.6;margin-bottom:14px;">ENTER YOUR POINTS FROM EACH CHAIN'S APP. WE'LL SHOW EVERYTHING YOU CAN REDEEM AND HOW CLOSE YOU ARE TO YOUR NEXT REWARD. SAVED ON THIS DEVICE — NO ACCOUNT NEEDED.</p>
+      <div id="chainList">
+        <div class="chain-row">
+          <div class="chain-left">
+            <span class="chain-icon">🍕</span>
+            <div>
+              <div class="chain-name">DOMINO'S</div>
+              <div class="chain-sub idle" id="sub-dominos">NO POINTS ADDED</div>
+            </div>
+          </div>
+          <button class="chain-btn" id="cbtn-dominos" onclick="openPointsEntry('dominos')">ADD PTS</button>
+        </div>
+        <div class="chain-row">
+          <div class="chain-left">
+            <span class="chain-icon">🔔</span>
+            <div>
+              <div class="chain-name">PIZZA HUT</div>
+              <div class="chain-sub idle" id="sub-pizzahut">NO POINTS ADDED</div>
+            </div>
+          </div>
+          <button class="chain-btn" id="cbtn-pizzahut" onclick="openPointsEntry('pizzahut')">ADD PTS</button>
+        </div>
+        <div class="chain-row">
+          <div class="chain-left">
+            <span class="chain-icon">🥖</span>
+            <div>
+              <div class="chain-name">PAPA JOHN'S</div>
+              <div class="chain-sub idle" id="sub-papajohns">NO POINTS ADDED</div>
+            </div>
+          </div>
+          <button class="chain-btn" id="cbtn-papajohns" onclick="openPointsEntry('papajohns')">ADD PTS</button>
+        </div>
+        <div class="chain-row">
+          <div class="chain-left">
+            <span class="chain-icon">👑</span>
+            <div>
+              <div class="chain-name">LITTLE CAESARS</div>
+              <div class="chain-sub idle" id="sub-littlecaesars">NO POINTS ADDED</div>
+            </div>
+          </div>
+          <button class="chain-btn" id="cbtn-littlecaesars" onclick="openPointsEntry('littlecaesars')">ADD PTS</button>
+        </div>
+      </div>
+      <div class="rewards-hint">
+        YOU ENTER THESE YOURSELF FROM EACH CHAIN'S APP — WE DON'T HAVE LIVE ACCESS TO YOUR ACCOUNTS. UPDATE THEM WHENEVER YOU EARN OR REDEEM.
+      </div>
+    </div>
+
+    <!-- PREFS -->
+    <div class="panel">
+      <div class="panel-title blue">⚙ SETTINGS</div>
+      <div class="pref-row"><span class="pref-lbl">Include local spots</span><label class="tog"><input type="checkbox" checked><span class="tog-sl"></span></label></div>
+      <div class="pref-row"><span class="pref-lbl">Carryout only</span><label class="tog"><input type="checkbox"><span class="tog-sl"></span></label></div>
+      <div class="pref-row"><span class="pref-lbl">Show my reward deals</span><label class="tog"><input type="checkbox" checked><span class="tog-sl"></span></label></div>
+      <div class="sl-row">
+        <div class="sl-lbl"><span>Max price</span><span class="sl-val" id="maxP">$30</span></div>
+        <input type="range" min="10" max="60" value="30" oninput="document.getElementById('maxP').textContent='$'+this.value">
+      </div>
+      <div class="sl-row">
+        <div class="sl-lbl"><span>Max distance</span><span class="sl-val" id="maxD">5 mi</span></div>
+        <input type="range" min="1" max="20" value="5" oninput="document.getElementById('maxD').textContent=this.value+' mi'">
+      </div>
+    </div>
+
+    <!-- AI DEAL-BOT (coming soon) -->
+    <div class="ai-panel">
+      <div class="panel-title pink" style="border-bottom:1px solid rgba(255,255,255,.06);padding-bottom:8px;margin-bottom:10px;">🤖 DEAL-BOT</div>
+      <p style="font-size:10px;color:var(--dim);letter-spacing:.05em;margin-bottom:10px;">ASK ABOUT ANY DEAL OR PIZZA VALUE QUESTION</p>
+      <textarea class="ai-ta" id="aiPrompt" placeholder="Coming soon — ask Deal-Bot which pizza is the best value, compare sizes, and more." disabled></textarea>
+      <button class="ai-btn" id="aiBtn" disabled style="opacity:.55;cursor:not-allowed;">▸ COMING SOON</button>
+      <div class="ai-out on" id="aiOut" style="color:var(--dim);">🤖 DEAL-BOT IS WARMING UP THE OVEN. THIS AI HELPER LAUNCHES SOON — CHECK BACK!</div>
+    </div>
+
+  </div>
+
+  <!-- DEALS AREA -->
+  <div>
+    <div class="deals-hdr">
+      <div class="deals-hdr-l">SHOWING <strong id="dealCount">8</strong> DEALS NEAR <strong id="dealLoc">— SET YOUR LOCATION —</strong></div>
+      <div class="live-badge">PRICES LIVE</div>
+    </div>
+
+    <!-- Best banner -->
+    <div class="best-banner">
+      <div>
+        <div class="best-label">🏆 TODAY'S BEST DEAL</div>
+        <div class="best-name" id="bestName">Domino's Mix &amp; Match</div>
+        <div class="best-detail" id="bestDetail">Large 2-topping · Carryout · 1.2 mi</div>
+      </div>
+      <div class="best-price-col">
+        <div class="best-price" id="bestPrice">$5.99</div>
+        <div class="best-per" id="bestPer">$0.039/SQ IN</div>
+      </div>
+      <button class="btn-order" id="bestOrderBtn">ORDER NOW ▸</button>
+    </div>
+
+    <div class="deals-list" id="dealsList"></div>
+  </div>
+</div>
+
+<!-- CPSI CALCULATOR -->
+<div class="calc-strip">
+  <div class="calc-title">COST-PER-SQUARE-INCH CALCULATOR</div>
+  <div class="calc-hint">PASTE ANY PIZZA'S SIZE AND PRICE TO SEE ITS TRUE VALUE</div>
+  <div class="calc-row">
+    <div class="calc-field"><label>Diameter (inches)</label><input class="calc-in" type="number" id="cD" placeholder="16" oninput="calcCPSI()"></div>
+    <div class="calc-field"><label>Price ($)</label><input class="calc-in" type="number" id="cP" placeholder="12.99" oninput="calcCPSI()"></div>
+    <div class="calc-field"><label>Slices</label><input class="calc-in" type="number" id="cS" placeholder="8" oninput="calcCPSI()"></div>
+  </div>
+  <div class="calc-readout">
+    <div><div class="calc-readout-lbl">Cost / sq in</div><div class="calc-readout-val" id="cpsiR">——</div></div>
+    <div><div class="calc-readout-lbl">Cost / slice</div><div class="calc-readout-val" id="sliceR">——</div></div>
+  </div>
+  <div class="calc-scale">
+    <span class="g">▸ UNDER $0.08 = GREAT DEAL</span>
+    <span style="color:var(--dim)">▸ $0.08–$0.12 = FAIR</span>
+    <span class="p">▸ OVER $0.12 = PRICEY</span>
+  </div>
+</div>
+
+<!-- WEEKLY DIGEST -->
+<div class="digest">
+  <div class="digest-title">WEEKLY DEAL DIGEST</div>
+  <div class="digest-sub">THE 5 BEST PIZZA DEALS IN YOUR AREA, EVERY FRIDAY — FREE</div>
+  <div class="digest-form">
+    <input class="digest-in" type="email" placeholder="YOUR@EMAIL.COM" id="digestEmail">
+    <button class="digest-btn" onclick="signupDigest()">SUBSCRIBE ▸</button>
+  </div>
+  <div class="digest-perks">
+    <span class="digest-perk">AI-curated top 5 deals</span>
+    <span class="digest-perk">Rewards points summary</span>
+    <span class="digest-perk">Expiring deals alert</span>
+    <span class="digest-perk">New local spots</span>
+    <span class="digest-perk">No spam, ever</span>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">🍕 MORE BANG FOR YOUR BUCK PIZZA.COM</div>
+  <div class="footer-note">PRICES SOURCED FROM CHAIN APIs AND COMMUNITY · ALWAYS VERIFY BEFORE ORDERING · NOT AFFILIATED WITH ANY CHAIN</div>
+  <div class="footer-links">
+    <a href="#">SUBMIT LOCAL DEAL</a>
+    <a href="#">HOW PRICES WORK</a>
+    <a href="#">PRIVACY</a>
+    <a href="#">CONTACT</a>
+  </div>
+</footer>
+
+<!-- DEAL MODAL -->
+<div class="overlay" id="dealM">
+  <div class="modal">
+    <div class="m-hdr">
+      <div>
+        <div style="font-size:10px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;" id="mType"></div>
+        <div class="m-title blue" id="mTitle"></div>
+        <div style="font-size:10px;color:var(--dim);margin-top:3px;letter-spacing:.04em;" id="mSub"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+        <button class="m-close" onclick="closeM('dealM')">✕</button>
+        <div class="m-price" id="mPrice"></div>
+      </div>
+    </div>
+    <div class="m-body">
+      <div class="val-bar-wrap">
+        <div class="val-bar-lbl"><span>VALUE SCORE</span><span class="val-bar-score" id="mScore"></span></div>
+        <div class="val-track"><div class="val-fill" id="mBar" style="width:0%"></div></div>
+      </div>
+      <div class="m-row"><label>Pizza size</label><strong id="mSize"></strong></div>
+      <div class="m-row"><label>Cost / sq inch</label><strong id="mCPSI"></strong></div>
+      <div class="m-row"><label>Offer</label><strong id="mOffer"></strong></div>
+      <div class="m-row"><label>Available via</label><strong id="mAvail"></strong></div>
+      <div class="m-row"><label>Distance · Rating</label><strong id="mDist"></strong></div>
+      <div class="m-row"><label>Rewards bonus</label><strong id="mRewards"></strong></div>
+      <div class="m-row"><label>Expires</label><strong id="mExpiry"></strong></div>
+      <div class="m-cta">
+        <button class="btn-go" id="mOrderBtn">ORDER NOW ▸</button>
+        <button class="btn-save" onclick="closeM('dealM')">[ SAVE ]</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- POINTS ENTRY MODAL -->
+<div class="overlay" id="pointsM">
+  <div class="modal sm">
+    <div class="m-hdr">
+      <div>
+        <div style="font-size:10px;color:var(--dim);letter-spacing:.1em;margin-bottom:4px;">ENTER YOUR POINTS</div>
+        <div class="m-title pink" id="peTitle"></div>
+        <div style="font-size:10px;color:var(--dim);margin-top:3px;letter-spacing:.04em;" id="peProgram"></div>
+      </div>
+      <button class="m-close" onclick="closeM('pointsM')">✕</button>
+    </div>
+    <div class="m-body">
+      <p class="c-note" style="margin-bottom:14px;">OPEN YOUR <strong id="peChainName"></strong> APP OR ACCOUNT, FIND YOUR POINTS BALANCE, AND TYPE IT IN BELOW.</p>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <input class="c-in" type="number" min="0" inputmode="numeric" placeholder="0" id="peInput" style="font-family:var(--font-d);font-size:28px;text-align:center;margin-bottom:0;flex:1;">
+        <span style="font-family:var(--font-d);font-size:24px;color:var(--pink);">PTS</span>
+      </div>
+      <button class="btn-go" style="width:100%;padding:12px;font-size:22px;text-align:center;" onclick="savePoints()">SAVE POINTS ▸</button>
+      <button id="peRemove" class="btn-save" style="width:100%;padding:10px;margin-top:8px;display:none;" onclick="removePoints()">[ REMOVE THIS CHAIN ]</button>
+      <p class="c-note" style="margin-top:12px;margin-bottom:0;text-align:center;">SAVED ON THIS DEVICE ONLY. UPDATE IT WHENEVER YOUR BALANCE CHANGES.</p>
+    </div>
+  </div>
+</div>
+
+<!-- REWARD INFO MODAL -->
+<div class="overlay" id="rewardInfoM">
+  <div class="modal sm">
+    <div class="m-hdr">
+      <div>
+        <div style="font-size:10px;color:var(--dim);letter-spacing:.1em;margin-bottom:4px;">★ YOUR REWARDS</div>
+        <div class="m-title pink" id="riTitle"></div>
+        <div style="font-size:10px;color:var(--dim);margin-top:3px;letter-spacing:.04em;" id="riProgram"></div>
+      </div>
+      <button class="m-close" onclick="closeM('rewardInfoM')">✕</button>
+    </div>
+    <div class="m-body">
+      <!-- Points balance block -->
+      <div class="ri-balance">
+        <div class="ri-balance-lbl">YOUR POINTS</div>
+        <div class="ri-balance-val" id="riPoints">0 PTS</div>
+        <div class="ri-balance-next" id="riNext"></div>
+      </div>
+
+      <div class="ri-section-lbl">REDEEM YOUR POINTS FOR:</div>
+      <div id="riTierList"></div>
+
+      <div class="m-row" style="margin-top:14px;"><label>How you earn</label><strong id="riEarn" style="text-align:right;max-width:60%;"></strong></div>
+      <div class="m-row"><label>Manage at</label><strong id="riUrl"></strong></div>
+
+      <div class="m-cta">
+        <button class="btn-go" id="riEditBtn">UPDATE POINTS ▸</button>
+      </div>
+      <p class="c-note" style="margin-top:12px;margin-bottom:0;">YOU ENTERED THIS BALANCE FROM YOUR <strong id="riChainName"></strong> ACCOUNT. KEEP IT CURRENT BY UPDATING IT WHEN YOU EARN OR REDEEM POINTS.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ALERT MODAL -->
+<div class="overlay" id="alertM">
+  <div class="modal sm pink-modal">
+    <div class="m-hdr">
+      <div>
+        <div style="font-size:10px;color:var(--dim);letter-spacing:.1em;margin-bottom:4px;">🔔 PRICE ALERT</div>
+        <div class="m-title pink">GET NOTIFIED</div>
+      </div>
+      <button class="m-close" onclick="closeM('alertM')">✕</button>
+    </div>
+    <div class="m-body">
+      <p class="c-note" style="margin-bottom:14px;">WE'LL TEXT OR EMAIL YOU WHEN A PIZZA DEAL DROPS BELOW YOUR TARGET PRICE NEAR YOU.</p>
+      <div style="margin-bottom:10px;">
+        <div style="font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Alert me when a large drops below:</div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-family:var(--font-d);font-size:28px;color:var(--pink);">$</span>
+          <input type="number" value="10" style="flex:1;padding:10px;background:var(--panel2);border:1px solid var(--border-p);color:var(--pink);font-family:var(--font-m);font-size:16px;outline:none;">
+        </div>
+      </div>
+      <input class="c-in" type="email" placeholder="YOUR@EMAIL.COM">
+      <input class="c-in" type="tel" placeholder="PHONE (OPTIONAL — FOR TEXTS)">
+      <button class="btn-go" style="width:100%;padding:12px;font-size:22px;text-align:center;background:var(--pink);" onclick="closeM('alertM');toast('PRICE ALERT SET! WE\'LL NOTIFY YOU ▸')">SET ALERT ▸</button>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT MODAL -->
+<div class="overlay" id="aboutM">
+  <div class="modal sm">
+    <div class="m-hdr">
+      <div><div class="m-title blue">HOW IT WORKS</div></div>
+      <button class="m-close" onclick="closeM('aboutM')">✕</button>
+    </div>
+    <div class="m-body">
+      <div class="m-row"><label>Ranking metric</label><strong>Cost Per Square Inch</strong></div>
+      <div class="m-row"><label>Chain prices</label><strong>Pulled from APIs daily</strong></div>
+      <div class="m-row"><label>Local prices</label><strong>Community + Google Places</strong></div>
+      <div class="m-row"><label>Rewards</label><strong>You enter points, saved on-device</strong></div>
+      <div class="m-row"><label>Refresh rate</label><strong>Every 15 minutes</strong></div>
+      <p style="font-size:10px;color:var(--dim);margin-top:14px;line-height:1.6;letter-spacing:.04em;">CPSI = PRICE ÷ (π × (DIAMETER/2)²). LOWER = MORE PIZZA PER DOLLAR. IT'S THE ONLY HONEST WAY TO COMPARE A 10" LOCAL PIE TO A 16" CHAIN DEAL.</p>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toastEl"></div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+const DEALS = [
+  { id:1, place:"Domino's",       emoji:"🍕", type:"chain", desc:"Mix & Match – Large 2-topping",          size:14, slices:8,  price:5.99,  avail:["carryout","online"],            distance:1.2, rating:4.1, rewards:true,  rSave:0,    offer:"Mix & Match (min 2 items)", expiry:"Ongoing", stuffed:false, order:"https://www.dominos.com/en/pages/order/" },
+  { id:2, place:"Giordano's",     emoji:"🏙️", type:"local", desc:"Deep dish medium – Tuesday special",    size:12, slices:6,  price:11.99, avail:["carryout","delivery"],          distance:0.7, rating:4.7, rewards:false, rSave:0,    offer:"Tuesday special (carryout)", expiry:"Tuesdays only", stuffed:true, order:"https://www.giordanos.com/order/" },
+  { id:3, place:"Pizza Hut",      emoji:"🔔", type:"chain", desc:"Large 3-topping + rewards discount",    size:14, slices:8,  price:10.99, avail:["carryout","delivery","online"],  distance:2.1, rating:3.9, rewards:true,  rSave:3.00, offer:"Hut Rewards member deal", expiry:"This week", stuffed:false, order:"https://www.pizzahut.com/" },
+  { id:4, place:"Little Caesars", emoji:"👑", type:"chain", desc:"Hot-N-Ready large pepperoni",           size:14, slices:8,  price:8.99,  avail:["carryout"],                     distance:0.4, rating:3.6, rewards:false, rSave:0,    offer:"Hot-N-Ready (no order needed)", expiry:"Daily while supplies last", stuffed:false, order:"https://littlecaesars.com/en-us/order/" },
+  { id:5, place:"Lou Malnati's",  emoji:"🧀", type:"local", desc:"Deep dish personal + free breadsticks", size:9,  slices:4,  price:9.50,  avail:["carryout","delivery"],          distance:1.8, rating:4.9, rewards:false, rSave:0,    offer:"Weekday lunch combo 11–2pm", expiry:"Weekday lunch", stuffed:true, order:"https://www.loumalnatis.com/order" },
+  { id:6, place:"Papa John's",    emoji:"🥖", type:"chain", desc:"Large specialty – Papa Rewards applied", size:14, slices:8,  price:13.99, avail:["delivery","online"],             distance:3.2, rating:4.0, rewards:true,  rSave:2.00, offer:"Code BIGFRIDAY", expiry:"Fridays only", stuffed:false, order:"https://www.papajohns.com/order/" },
+  { id:7, place:"Pie Five",       emoji:"🌿", type:"local", desc:"Build-your-own 11\" personal",          size:11, slices:6,  price:10.49, avail:["carryout","online"],             distance:2.6, rating:4.3, rewards:false, rSave:0,    offer:"App order discount", expiry:"App users only", stuffed:false, order:"https://order.piefivepizza.com/" },
+  { id:8, place:"Aurelio's",      emoji:"⭐", type:"local", desc:"Thin crust large, any 2 toppings",     size:16, slices:10, price:16.99, avail:["carryout","delivery"],           distance:4.1, rating:4.6, rewards:false, rSave:0,    offer:"Regular menu price", expiry:"No expiry", stuffed:false, order:"https://aureliospizza.com/order/" },
+  { id:9, place:"Pizza Hut",      emoji:"🔔", type:"chain", desc:"Large Original Stuffed Crust",          size:14, slices:8,  price:13.99, avail:["carryout","delivery","online"],  distance:2.1, rating:3.9, rewards:true,  rSave:2.00, offer:"Stuffed crust signature", expiry:"Ongoing", stuffed:true, order:"https://www.pizzahut.com/" },
+  { id:10, place:"Domino's",      emoji:"🍕", type:"chain", desc:"Large Philly Cheese Stuffed Crust",     size:14, slices:8,  price:14.99, avail:["carryout","delivery","online"],  distance:1.2, rating:4.1, rewards:true,  rSave:0,    offer:"Stuffed crust specialty", expiry:"Ongoing", stuffed:true, order:"https://www.dominos.com/en/pages/order/" },
+  { id:11, place:"Papa John's",   emoji:"🥖", type:"chain", desc:"Large Epic Stuffed Crust pepperoni",    size:14, slices:8,  price:15.99, avail:["delivery","online"],             distance:3.2, rating:4.0, rewards:true,  rSave:2.00, offer:"Epic Stuffed Crust", expiry:"Ongoing", stuffed:true, order:"https://www.papajohns.com/order/" },
+  { id:12, place:"Marco's Pizza", emoji:"🍕", type:"chain", desc:"Large Stuffed Crust 1-topping",         size:14, slices:8,  price:12.49, avail:["carryout","delivery","online"],  distance:2.9, rating:4.2, rewards:true,  rSave:0,    offer:"Online stuffed crust deal", expiry:"This week", stuffed:true, order:"https://www.marcos.com/" },
+];
+
+// Order helper — opens the chain's order page in a new tab
+function placeOrder(d, ev) {
+  if (ev) ev.stopPropagation();
+  if (d.order) window.open(d.order, '_blank', 'noopener');
+}
+
+const cpsi = d => d.price / (Math.PI * Math.pow(d.size/2, 2));
+const cpsiStr = d => '$' + cpsi(d).toFixed(4) + '/sq in';
+const valPct = d => Math.max(0, Math.min(100, (1 - (cpsi(d) - 0.025) / (0.13 - 0.025)) * 100));
+const scoreLabel = p => p >= 80 ? '🔥 EXCEPTIONAL' : p >= 60 ? '✅ GREAT' : p >= 40 ? '👍 FAIR' : '😬 PRICEY';
+
+DEALS.sort((a, b) => cpsi(a) - cpsi(b));
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+function renderDeals(list) {
+  const el = document.getElementById('dealsList');
+  el.innerHTML = '';
+  document.getElementById('dealCount').textContent = list.length;
+  if (!list.length) {
+    el.innerHTML = '<div style="padding:40px;text-align:center;font-size:11px;color:var(--dim);">NO DEALS MATCH YOUR FILTERS</div>';
+    return;
+  }
+  const top = list[0];
+  document.getElementById('bestName').textContent  = top.place + ' — ' + top.desc.split('–')[0].trim();
+  document.getElementById('bestDetail').textContent = top.desc + ' · ' + top.avail.join('/') + ' · ' + top.distance + ' mi';
+  document.getElementById('bestPrice').textContent  = '$' + top.price.toFixed(2);
+  document.getElementById('bestPer').textContent    = cpsiStr(top).toUpperCase();
+  document.getElementById('bestOrderBtn').onclick   = () => placeOrder(top);
+
+  list.forEach((d, i) => {
+    const rank = i + 1;
+    const rClass = rank <= 3 ? 'r' + rank : '';
+    const tags = d.avail.map(t => `<span class="tag ${t}">${t}</span>`).join('')
+      + (d.stuffed ? `<span class="tag stuffed">🧀 STUFFED CRUST</span>` : '')
+      + (d.rewards ? `<span class="tag rewards">★ REWARDS</span>` : '')
+      + (d.offer.match(/deal|special|code|ready/i) ? `<span class="tag deal">★ DEAL</span>` : '');
+    const save = d.rSave > 0 ? `<div class="c-save">+$${d.rSave.toFixed(2)} SAVED</div>` : '';
+    const card = document.createElement('div');
+    card.className = 'card' + (rank === 1 ? ' top' : '');
+    card.onclick = () => openDealModal(d, rank);
+    card.innerHTML = `
+      <div class="rank ${rClass}">#${rank}</div>
+      <div class="c-meta">
+        <div class="c-place">${d.emoji} ${d.place} <span class="badge ${d.type}">${d.type}</span></div>
+        <div class="c-desc">${d.desc}</div>
+        <div class="c-tags">${tags}</div>
+      </div>
+      <div class="c-price-col">
+        <div class="c-price">$${d.price.toFixed(2)}</div>
+        <div class="c-cpsi">${cpsiStr(d).toUpperCase()}</div>
+        ${save}
+      </div>
+      <div class="c-btns">
+        <button class="btn-go btn-card-order">ORDER ▸</button>
+        <button class="btn-save" onclick="event.stopPropagation()">[ SAVE ]</button>
+      </div>`;
+    card.querySelector('.btn-card-order').onclick = (ev) => placeOrder(d, ev);
+    el.appendChild(card);
+  });
+}
+renderDeals(DEALS);
+
+// ── FILTERS ───────────────────────────────────────────────────────────────────
+let activeF = 'all';
+function setF(el, v) {
+  document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active'); activeF = v; applyFilter();
+}
+function sortD(v) {
+  if (v === 'value')    DEALS.sort((a, b) => cpsi(a) - cpsi(b));
+  if (v === 'price')    DEALS.sort((a, b) => a.price - b.price);
+  if (v === 'size')     DEALS.sort((a, b) => b.size - a.size);
+  if (v === 'distance') DEALS.sort((a, b) => a.distance - b.distance);
+  if (v === 'rating')   DEALS.sort((a, b) => b.rating - a.rating);
+  applyFilter();
+}
+function applyFilter() {
+  let list = [...DEALS];
+  if (activeF === 'chain')    list = list.filter(d => d.type === 'chain');
+  if (activeF === 'local')    list = list.filter(d => d.type === 'local');
+  if (activeF === 'delivery') list = list.filter(d => d.avail.includes('delivery'));
+  if (activeF === 'carryout') list = list.filter(d => d.avail.includes('carryout'));
+  if (activeF === 'online')   list = list.filter(d => d.avail.includes('online'));
+  if (activeF === 'rewards')  list = list.filter(d => d.rewards);
+  if (activeF === 'stuffed')  list = list.filter(d => d.stuffed);
+  renderDeals(list);
+}
+
+function runSearch() {
+  const loc = document.getElementById('locIn').value.trim();
+  if (!loc) {
+    document.getElementById('gpsHint').textContent = '▸ ENTER A ZIP/ADDRESS OR TAP 📍 TO USE GPS';
+    document.getElementById('gpsHint').className = 'gps-hint err';
+    document.getElementById('locIn').focus();
+    return;
+  }
+  document.getElementById('dealLoc').textContent = loc.toUpperCase();
+  renderDeals(DEALS);
+}
+
+// ── DEAL MODAL ────────────────────────────────────────────────────────────────
+function openDealModal(d, rank) {
+  const pct = valPct(d);
+  document.getElementById('mType').textContent    = d.type.toUpperCase() + (d.rewards ? '  ·  ★ REWARDS DEAL' : '');
+  document.getElementById('mTitle').textContent   = d.place.toUpperCase();
+  document.getElementById('mSub').textContent     = d.desc;
+  document.getElementById('mPrice').textContent   = '$' + d.price.toFixed(2);
+  document.getElementById('mScore').textContent   = scoreLabel(pct);
+  document.getElementById('mBar').style.width     = pct + '%';
+  document.getElementById('mSize').textContent    = d.size + '" · ' + d.slices + ' slices · ' + Math.round(Math.PI * Math.pow(d.size/2,2)) + ' sq in';
+  document.getElementById('mCPSI').textContent    = cpsiStr(d);
+  document.getElementById('mOffer').textContent   = d.offer;
+  document.getElementById('mAvail').textContent   = d.avail.join(', ');
+  document.getElementById('mDist').textContent    = d.distance + ' mi · ' + d.rating + '⭐';
+  document.getElementById('mRewards').textContent = d.rSave > 0 ? '−$' + d.rSave.toFixed(2) + ' applied' : 'None';
+  document.getElementById('mExpiry').textContent  = d.expiry;
+  document.getElementById('mOrderBtn').onclick    = () => placeOrder(d);
+  openM('dealM');
+}
+
+// ── CHAIN REWARDS ─────────────────────────────────────────────────────────────
+// Reward program details + redemption catalogs per chain. Points balances are
+// NOT stored here — the user enters their own, saved on-device (see store below).
+const CHAIN_INFO = {
+  dominos: {
+    name: "Domino's", emoji: "🍕", program: "Piece of the Pie Rewards",
+    url: "secure.dominos.com",
+    earn: "10 pts per online order of $5+",
+    tiers: [
+      { cost: 20, item: "Dip cup, 20 oz drink, or 16-pc Parmesan Bread Bites" },
+      { cost: 40, item: "32-pc Parmesan Bread Bites or Stuffed Cheesy Bread" },
+      { cost: 60, item: "Medium 2-topping pizza, sandwich, pasta, or salad" },
+      { cost: 80, item: "Large 3-topping pizza" },
+    ],
+  },
+  pizzahut: {
+    name: "Pizza Hut", emoji: "🔔", program: "Hut Rewards",
+    url: "account.pizzahut.com",
+    earn: "2 pts per $1 spent",
+    tiers: [
+      { cost: 75,  item: "Free order of breadsticks" },
+      { cost: 150, item: "Free medium 1-topping pizza" },
+      { cost: 200, item: "Free large 3-topping pizza" },
+      { cost: 250, item: "Free large specialty pizza" },
+    ],
+  },
+  papajohns: {
+    name: "Papa John's", emoji: "🥖", program: "Papa Rewards",
+    url: "papajohns.com/account",
+    earn: "1 pt per $1 spent",
+    tiers: [
+      { cost: 25, item: "$5 Papa Dough toward any order" },
+      { cost: 50, item: "$10 Papa Dough toward any order" },
+      { cost: 75, item: "$15 Papa Dough toward any order" },
+    ],
+  },
+  littlecaesars: {
+    name: "Little Caesars", emoji: "👑", program: "Little Caesars Rewards",
+    url: "littlecaesars.com/rewards",
+    earn: "10 pts per $1 spent in-app",
+    tiers: [
+      { cost: 50,  item: "Free Crazy Bread" },
+      { cost: 75,  item: "Free 2-liter soda" },
+      { cost: 100, item: "Free Crazy Combo" },
+      { cost: 125, item: "Free large pepperoni pizza" },
+    ],
+  },
+};
+
+// ── ON-DEVICE STORAGE ─────────────────────────────────────────────────────────
+// Persists the user's manually-entered points on their own device via
+// localStorage. Falls back to an in-memory object where storage is unavailable
+// (e.g. this preview), so it never crashes — it just won't persist across visits.
+const STORE_KEY = 'mbfyb_points';
+let memFallback = {};
+function loadPoints() {
+  try {
+    const raw = window.localStorage.getItem(STORE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    return memFallback;
+  }
+}
+function persistPoints(obj) {
+  try {
+    window.localStorage.setItem(STORE_KEY, JSON.stringify(obj));
+  } catch (e) {
+    memFallback = obj;
+  }
+}
+let userPoints = loadPoints();  // { dominos: 40, pizzahut: 130, ... }
+
+// Refresh every chain row in the sidebar to reflect stored points
+function refreshChainRows() {
+  Object.keys(CHAIN_INFO).forEach(key => {
+    const sub = document.getElementById('sub-' + key);
+    const btn = document.getElementById('cbtn-' + key);
+    if (key in userPoints) {
+      const pts = userPoints[key];
+      sub.textContent = pts + ' PTS · TAP TO VIEW';
+      sub.className = 'chain-sub linked';
+      btn.textContent = 'EDIT';
+      btn.className = 'chain-btn linked';
+      btn.setAttribute('onclick', `showRewardInfo('${key}')`);
+    } else {
+      sub.textContent = 'NO POINTS ADDED';
+      sub.className = 'chain-sub idle';
+      btn.textContent = 'ADD PTS';
+      btn.className = 'chain-btn';
+      btn.setAttribute('onclick', `openPointsEntry('${key}')`);
+    }
+  });
+}
+
+// ── MANUAL POINTS ENTRY ───────────────────────────────────────────────────────
+let pendingKey = null;
+function openPointsEntry(key) {
+  pendingKey = key;
+  const info = CHAIN_INFO[key];
+  document.getElementById('peTitle').textContent     = info.emoji + ' ' + info.name.toUpperCase();
+  document.getElementById('peProgram').textContent   = info.program;
+  document.getElementById('peChainName').textContent = info.name.toUpperCase();
+  const input = document.getElementById('peInput');
+  input.value = (key in userPoints) ? userPoints[key] : '';
+  document.getElementById('peRemove').style.display = (key in userPoints) ? 'block' : 'none';
+  openM('pointsM');
+  setTimeout(() => input.focus(), 50);
+}
+
+function savePoints() {
+  if (!pendingKey) return;
+  const val = parseInt(document.getElementById('peInput').value, 10);
+  if (isNaN(val) || val < 0) {
+    toast('ENTER A VALID POINTS NUMBER');
+    return;
+  }
+  userPoints[pendingKey] = val;
+  persistPoints(userPoints);
+  refreshChainRows();
+  closeM('pointsM');
+  showRewardInfo(pendingKey);
+}
+
+function removePoints() {
+  if (!pendingKey) return;
+  delete userPoints[pendingKey];
+  persistPoints(userPoints);
+  refreshChainRows();
+  closeM('pointsM');
+  toast('CHAIN REMOVED');
+  pendingKey = null;
+}
+
+// Show points balance + every redemption option, flagging what's affordable now
+function showRewardInfo(key) {
+  const info = CHAIN_INFO[key];
+  const pts  = userPoints[key] || 0;
+  document.getElementById('riTitle').textContent     = info.emoji + ' ' + info.name.toUpperCase();
+  document.getElementById('riProgram').textContent   = info.program;
+  document.getElementById('riEarn').textContent      = info.earn;
+  document.getElementById('riUrl').textContent       = info.url;
+  document.getElementById('riPoints').textContent    = pts + ' PTS';
+  document.getElementById('riChainName').textContent = info.name.toUpperCase();
+  document.getElementById('riEditBtn').onclick       = () => { closeM('rewardInfoM'); openPointsEntry(key); };
+
+  // Next reward progress
+  const nextTier = info.tiers.find(t => t.cost > pts);
+  const progEl = document.getElementById('riNext');
+  if (nextTier) {
+    const need = nextTier.cost - pts;
+    progEl.textContent = `${need} MORE PTS → ${nextTier.item.toUpperCase()}`;
+  } else if (info.tiers.length) {
+    progEl.textContent = 'YOU CAN REDEEM THE TOP REWARD!';
+  } else {
+    progEl.textContent = '';
+  }
+
+  // Build the full redemption list
+  const list = document.getElementById('riTierList');
+  list.innerHTML = '';
+  info.tiers.forEach(t => {
+    const affordable = pts >= t.cost;
+    const row = document.createElement('div');
+    row.className = 'tier-row' + (affordable ? ' ready' : '');
+    row.innerHTML = `
+      <div class="tier-cost">${t.cost} PTS</div>
+      <div class="tier-item">${t.item}</div>
+      <div class="tier-status">${affordable ? '✓ REDEEM' : 'LOCKED'}</div>`;
+    list.appendChild(row);
+  });
+
+  openM('rewardInfoM');
+}
+
+// Initialize rows from any previously-saved points
+refreshChainRows();
+
+// ── MODALS ────────────────────────────────────────────────────────────────────
+function openM(id)  { document.getElementById(id).classList.add('open'); }
+function closeM(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.overlay').forEach(el => {
+  el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
+});
+
+// ── CALCULATORS ───────────────────────────────────────────────────────────────
+function calcCPSI() {
+  const d = parseFloat(document.getElementById('cD').value);
+  const p = parseFloat(document.getElementById('cP').value);
+  const s = parseFloat(document.getElementById('cS').value) || 0;
+  if (!d || !p) { document.getElementById('cpsiR').textContent = '——'; document.getElementById('sliceR').textContent = '——'; return; }
+  document.getElementById('cpsiR').textContent = '$' + (p / (Math.PI * Math.pow(d/2,2))).toFixed(4);
+  document.getElementById('sliceR').textContent = s > 0 ? '$' + (p/s).toFixed(2) : '——';
+}
+
+// ── DIGEST ────────────────────────────────────────────────────────────────────
+function signupDigest() {
+  const v = document.getElementById('digestEmail').value.trim();
+  if (!v || !v.includes('@')) { toast('ENTER A VALID EMAIL ADDRESS'); return; }
+  document.getElementById('digestEmail').value = '';
+  toast('SUBSCRIBED! FIRST DIGEST ARRIVES THIS FRIDAY ▸');
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+function toast(msg) {
+  const el = document.getElementById('toastEl');
+  el.textContent = msg; el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 3500);
+}
+
+// ── AI DEAL-BOT (COMING SOON) ─────────────────────────────────────────────────
+// The Deal-Bot is intentionally disabled for the static/test deployment.
+//
+// WHY: it calls an LLM API, and an API key cannot live in browser code (anyone
+// could view-source and steal it). To turn this on for production:
+//   1. Add your Anthropic API key as a SECRET env var on Render/Netlify
+//      (never commit it to GitHub).
+//   2. Create a small serverless function (e.g. /api/dealbot) that receives the
+//      user's question, calls the Anthropic API server-side with the key, and
+//      returns the text answer.
+//   3. Point the fetch() below at YOUR function URL (e.g. '/api/dealbot')
+//      instead of the API directly, then remove the early return + re-enable
+//      the input/button in the HTML.
+//
+// The full working client logic is preserved below for that day.
+async function askAI() {
+  // Coming-soon guard: do nothing on the live static site.
+  return;
+
+  /* --- ENABLE WHEN THE SERVERLESS FUNCTION EXISTS ---
+  const prompt = document.getElementById('aiPrompt').value.trim();
+  if (!prompt) return;
+  const btn = document.getElementById('aiBtn');
+  const out  = document.getElementById('aiOut');
+  btn.disabled = true; btn.textContent = '▸ THINKING...';
+  out.classList.add('on');
+  out.innerHTML = '<span class="ai-cursor"></span>';
+
+  const context = DEALS.map((d,i) =>
+    `#${i+1} ${d.place} (${d.type}): ${d.desc} — $${d.price}, ${d.size}" pizza, $${cpsi(d).toFixed(4)}/sq in, ${d.avail.join('/')}, ${d.rewards?'rewards deal':'no rewards'}, ${d.distance} mi, rated ${d.rating}/5`
+  ).join('\n');
+
+  const loc = document.getElementById('locIn').value.trim() || 'the user\'s area';
+
+  const system = `You are Deal-Bot, the no-nonsense AI for "More Bang For Your Buck Pizza.com" — a site ranking pizza deals by cost per square inch (CPSI). Be brief, direct, and fun. 80s slang welcome. Max 100 words. Always recommend the best value option when relevant.
+
+Current sample deals near ${loc}:
+${context}
+
+CPSI formula: price ÷ (π × (diameter/2)²). Lower = better. Under $0.08/sq in is exceptional.`;
+
+  try {
+    // In production this points at YOUR serverless function, not the API directly.
+    const res = await fetch('/api/dealbot', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system, prompt })
+    });
+    const data = await res.json();
+    const text = data.content?.find(b => b.type === 'text')?.text || 'DEAL-BOT OFFLINE. TRY AGAIN!';
+    out.innerHTML = '';
+    let i = 0;
+    const cursor = document.createElement('span');
+    cursor.className = 'ai-cursor';
+    function type() {
+      if (i < text.length) { out.textContent = text.slice(0, ++i); out.appendChild(cursor); setTimeout(type, 16); }
+      else cursor.remove();
+    }
+    type();
+  } catch(e) {
+    out.textContent = 'DEAL-BOT OFFLINE. CHECK YOUR CONNECTION.';
+  }
+  btn.disabled = false; btn.textContent = '▸ ASK DEAL-BOT';
+  --- END ENABLE BLOCK --- */
+}
+
+// ── GPS LOCATION ──────────────────────────────────────────────────────────────
+function useGPS() {
+  const btn  = document.getElementById('gpsBtn');
+  const hint = document.getElementById('gpsHint');
+  const inp  = document.getElementById('locIn');
+
+  if (!navigator.geolocation) {
+    hint.textContent = 'GPS NOT SUPPORTED IN THIS BROWSER';
+    hint.className = 'gps-hint err';
+    return;
+  }
+
+  btn.textContent = '📡';
+  btn.className = 'gps-btn locating';
+  hint.textContent = 'REQUESTING LOCATION ACCESS...';
+  hint.className = 'gps-hint';
+
+  navigator.geolocation.getCurrentPosition(
+    async (pos) => {
+      const { latitude: lat, longitude: lon } = pos.coords;
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`,
+          { headers: { 'Accept-Language': 'en' } }
+        );
+        const data = await res.json();
+        const addr = data.address || {};
+        const city  = addr.city || addr.town || addr.village || addr.suburb || '';
+        const state = addr.state || '';
+        const zip   = addr.postcode || '';
+        const label = city && state ? `${city}, ${state} ${zip}`.trim()
+                    : zip            ? zip
+                    : `${lat.toFixed(4)}, ${lon.toFixed(4)}`;
+        inp.value = label;
+        document.getElementById('dealLoc').textContent = label.toUpperCase();
+        hint.textContent = '▸ GPS LOCATION FOUND — DEALS UPDATED';
+        hint.className = 'gps-hint ok';
+      } catch {
+        inp.value = `${lat.toFixed(5)}, ${lon.toFixed(5)}`;
+        hint.textContent = '▸ GPS ACQUIRED — USING COORDINATES';
+        hint.className = 'gps-hint ok';
+      }
+
+      btn.textContent = '✓';
+      btn.className = 'gps-btn located';
+      renderDeals(DEALS);
+
+      setTimeout(() => {
+        btn.textContent = '📍';
+        btn.className = 'gps-btn';
+      }, 4000);
+    },
+    (err) => {
+      btn.textContent = '📍';
+      btn.className = 'gps-btn';
+      const msgs = {
+        1: 'LOCATION ACCESS DENIED — ENTER ZIP MANUALLY',
+        2: 'COULD NOT DETECT YOUR LOCATION',
+        3: 'LOCATION REQUEST TIMED OUT',
+      };
+      hint.textContent = msgs[err.code] || 'LOCATION ERROR — ENTER ZIP MANUALLY';
+      hint.className = 'gps-hint err';
+    },
+    { enableHighAccuracy: true, timeout: 8000, maximumAge: 60000 }
+  );
+}
+
+// ── ASTEROIDS BACKGROUND ──────────────────────────────────────────────────────
+// A self-playing, procedurally-generated homage to Atari Asteroids (1979): neon
+// wireframe vectors on a transparent layer behind the page. The ship is a pizza
+// slice that roams the whole screen, hunts and shoots asteroids (which split into
+// smaller pieces), actively dodges them, explodes if hit, tracks lives + score,
+// and shows "INSERT 25¢" on game over before restarting. Every run is different:
+// asteroid count, shapes, headings, speeds, and the ship's wandering are random.
+(function(){
+  const canvas = document.getElementById('asteroids-bg');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const PINK = '#FF2D78', BLUE = '#00CFFF', WHITE = '#E8E8F4';
+  let W, H, dpr;
+
+  function resize(){
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = window.innerWidth; H = window.innerHeight;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const rand  = (a,b) => a + Math.random()*(b-a);
+  const randi = (a,b) => Math.floor(rand(a,b+1));
+  function wrap(o){
+    if (o.x < -o.r) o.x = W + o.r; else if (o.x > W + o.r) o.x = -o.r;
+    if (o.y < -o.r) o.y = H + o.r; else if (o.y > H + o.r) o.y = -o.r;
+  }
+  function dist2(a,b){ return (a.x-b.x)**2 + (a.y-b.y)**2; }
+
+  // ── Game state ──
+  let asteroids, bullets, particles, ship, score, lives, gameOver, goTimer, respawnTimer, level;
+  let frame = 0;
+
+  // ── Procedural asteroid ──
+  function makeAsteroid(x, y, r){
+    const verts = [], n = randi(8,12);
+    for (let i=0;i<n;i++){
+      const ang = (i/n)*Math.PI*2;
+      const rad = r * rand(0.68, 1.15);     // jagged silhouette, randomized per vertex
+      verts.push({ x: Math.cos(ang)*rad, y: Math.sin(ang)*rad });
+    }
+    // slower overall: base speed scaled down, smaller rocks slightly faster
+    const sp  = rand(0.10, 0.34) * (50/r + 0.5);
+    const dir = rand(0, Math.PI*2);
+    return {
+      x: x ?? rand(0,W), y: y ?? rand(0,H), r,
+      vx: Math.cos(dir)*sp, vy: Math.sin(dir)*sp,
+      rot: rand(0,Math.PI*2), vrot: rand(-0.006,0.006),
+      verts
+    };
+  }
+  // Spawn a single asteroid drifting in from just off a random screen edge,
+  // heading roughly across the screen — used to keep a continuous stream.
+  function spawnFromEdge(r){
+    r = r || rand(36,60);
+    const edge = randi(0,3);
+    let x, y, dir;
+    if (edge===0){ x=rand(0,W); y=-r;     dir=rand(Math.PI*0.25, Math.PI*0.75); }     // top → down
+    else if (edge===1){ x=W+r; y=rand(0,H); dir=rand(Math.PI*0.75, Math.PI*1.25); }    // right → left
+    else if (edge===2){ x=rand(0,W); y=H+r; dir=rand(Math.PI*1.25, Math.PI*1.75); }    // bottom → up
+    else { x=-r; y=rand(0,H); dir=rand(-Math.PI*0.25, Math.PI*0.25); }                  // left → right
+    const a = makeAsteroid(x, y, r);
+    const spd = rand(0.18, 0.42) * (50/r + 0.5);
+    a.vx = Math.cos(dir)*spd; a.vy = Math.sin(dir)*spd;
+    return a;
+  }
+
+  // Initial field: scatter a few already on-screen, away from the ship.
+  function seedAsteroids(){
+    asteroids = [];
+    const count = randi(4, Math.max(5, Math.round(W/320)));
+    for (let i=0;i<count;i++){
+      let a;
+      do { a = makeAsteroid(undefined, undefined, rand(36,60)); }
+      while (ship && dist2(a, ship) < (200*200));
+      asteroids.push(a);
+    }
+  }
+
+  function splitAsteroid(a){
+    const idx = asteroids.indexOf(a);
+    if (idx>-1) asteroids.splice(idx,1);
+    // arcade scoring: large 20, medium 50, small 100
+    score += a.r > 46 ? 20 : a.r > 28 ? 50 : 100;
+    explode(a.x, a.y, a.r, BLUE, Math.round(a.r/3));
+    // large and medium split into exactly TWO smaller rocks; small ones vanish
+    if (a.r > 24){
+      const nr = a.r * 0.55;
+      // two pieces fly apart at opposite angles from the parent's heading
+      const base = Math.atan2(a.vy, a.vx);
+      for (let s=-1; s<=1; s+=2){
+        const piece = makeAsteroid(a.x, a.y, nr);
+        const ang = base + s*rand(0.5,1.1);
+        const spd = Math.hypot(a.vx,a.vy)*1.25 + rand(0.2,0.6);
+        piece.vx = Math.cos(ang)*spd;
+        piece.vy = Math.sin(ang)*spd;
+        asteroids.push(piece);
+      }
+    }
+    // NO wave reset — new rocks stream in continuously from the edges instead.
+  }
+
+  // ── Pizza-slice ship ──
+  function newShip(center){
+    return {
+      x: center ? W*0.5 : rand(W*0.2, W*0.8),
+      y: center ? H*0.5 : rand(H*0.2, H*0.8),
+      vx: 0, vy: 0, angle: rand(0,Math.PI*2), r: 16,
+      cooldown: 0, target: null, thrust: false, alive: true,
+      wanderBurst: false, wanderTimer: 0, invuln: 90
+    };
+  }
+
+  function fire(){
+    const sp = 6.5;   // bullet moves notably faster than the slow ship
+    bullets.push({
+      x: ship.x + Math.cos(ship.angle)*ship.r,
+      y: ship.y + Math.sin(ship.angle)*ship.r,
+      vx: Math.cos(ship.angle)*sp + ship.vx*0.5,
+      vy: Math.sin(ship.angle)*sp + ship.vy*0.5,
+      life: 55, r: 1     // limited range, like the arcade's screen-distance cutoff
+    });
+  }
+
+  function explode(x, y, size, color, n){
+    n = n || 10;
+    for (let i=0;i<n;i++){
+      const a = rand(0,Math.PI*2), s = rand(0.6, 2.6);
+      particles.push({ x, y, vx:Math.cos(a)*s, vy:Math.sin(a)*s, life: rand(20,46), color });
+    }
+  }
+
+  function killShip(){
+    if (!ship.alive || ship.invuln>0) return;
+    ship.alive = false;
+    explode(ship.x, ship.y, ship.r, PINK, 22);
+    lives--;
+    if (lives <= 0){ gameOver = true; goTimer = 0; }
+    else respawnTimer = 70;
+  }
+
+  function resetGame(){
+    score = 0; lives = 3; level = 1;
+    gameOver = false; goTimer = 0; respawnTimer = 0;
+    bullets = []; particles = [];
+    ship = newShip(true);
+    seedAsteroids();
+  }
+
+  // ── Drawing ──
+  function drawAsteroid(a){
+    ctx.save();
+    ctx.translate(a.x, a.y); ctx.rotate(a.rot);
+    ctx.beginPath();
+    a.verts.forEach((v,i)=> i? ctx.lineTo(v.x,v.y) : ctx.moveTo(v.x,v.y));
+    ctx.closePath();
+    ctx.strokeStyle = BLUE; ctx.lineWidth = 1.6;
+    ctx.shadowColor = BLUE; ctx.shadowBlur = 8;
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawShip(){
+    if (!ship.alive) return;
+    // blink while invulnerable just after spawning
+    if (ship.invuln>0 && Math.floor(ship.invuln/5)%2===0) return;
+    ctx.save();
+    ctx.translate(ship.x, ship.y);
+    ctx.rotate(ship.angle + Math.PI/2);
+    const r = ship.r;
+    ctx.strokeStyle = PINK; ctx.lineWidth = 2;
+    ctx.shadowColor = PINK; ctx.shadowBlur = 10;
+    // slice body (triangle, tip forward)
+    ctx.beginPath();
+    ctx.moveTo(0, -r*1.15);
+    ctx.lineTo(-r*0.7, r*0.75);
+    ctx.lineTo( r*0.7, r*0.75);
+    ctx.closePath(); ctx.stroke();
+    // crust arc
+    ctx.beginPath();
+    ctx.moveTo(-r*0.7, r*0.75);
+    ctx.quadraticCurveTo(0, r*1.05, r*0.7, r*0.75);
+    ctx.stroke();
+    // pepperoni
+    ctx.beginPath(); ctx.arc(0, -r*0.1, 2.0, 0, Math.PI*2); ctx.stroke();
+    ctx.beginPath(); ctx.arc(-r*0.22, r*0.4, 1.7, 0, Math.PI*2); ctx.stroke();
+    ctx.beginPath(); ctx.arc( r*0.24, r*0.4, 1.7, 0, Math.PI*2); ctx.stroke();
+    // thrust flame — flickers on alternate frames, like the arcade booster
+    if (ship.thrust && Math.floor(frame/3)%2===0){
+      ctx.beginPath();
+      ctx.moveTo(-r*0.32, r*0.78);
+      ctx.lineTo(0, r*1.05 + rand(4,12));   // jittering flame length
+      ctx.lineTo(r*0.32, r*0.78);
+      ctx.strokeStyle = BLUE; ctx.shadowColor = BLUE; ctx.shadowBlur = 10;
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  // small vector ship icon for the lives display
+  function drawLifeIcon(x, y, s){
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.strokeStyle = PINK; ctx.lineWidth = 1.4;
+    ctx.shadowColor = PINK; ctx.shadowBlur = 6;
+    ctx.beginPath();
+    ctx.moveTo(0, -s);
+    ctx.lineTo(-s*0.6, s*0.65);
+    ctx.lineTo( s*0.6, s*0.65);
+    ctx.closePath(); ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(-s*0.6, s*0.65);
+    ctx.quadraticCurveTo(0, s*0.9, s*0.6, s*0.65);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawHUD(){
+    ctx.save();
+    // HUD sits well below the sticky header/marquee so it isn't hidden
+    const hudY = 150;
+    ctx.shadowColor = BLUE; ctx.shadowBlur = 6;
+    ctx.fillStyle = BLUE;
+    ctx.font = "26px 'VT323', monospace";
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    // score
+    ctx.fillText('SCORE ' + String(score).padStart(5,'0'), 24, hudY);
+    // lives as little pizza ships, on the same line to the right of the score
+    const scoreW = ctx.measureText('SCORE ' + String(score).padStart(5,'0')).width;
+    let lx = 24 + scoreW + 26;
+    for (let i=0;i<lives;i++){ drawLifeIcon(lx, hudY, 9); lx += 24; }
+    ctx.restore();
+    return hudY;
+  }
+
+  function drawGameOver(){
+    ctx.save();
+    const hudY = 150;
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    // GAME OVER + final score, directly under the HUD line
+    ctx.shadowColor = BLUE; ctx.shadowBlur = 8;
+    ctx.fillStyle = BLUE;
+    ctx.font = "24px 'VT323', monospace";
+    ctx.fillText('GAME OVER  \u2014  SCORE ' + String(score).padStart(5,'0'), 24, hudY + 34);
+    // blinking INSERT 25¢ just beneath that, like the arcade attract screen
+    if (Math.floor(goTimer/30)%2===0){
+      ctx.shadowColor = PINK; ctx.shadowBlur = 12;
+      ctx.fillStyle = PINK;
+      ctx.font = "40px 'VT323', monospace";
+      ctx.fillText('INSERT 25\u00A2', 24, hudY + 76);
+    }
+    ctx.restore();
+  }
+
+  // ── Update ──
+  function step(){
+    frame++;
+    ctx.clearRect(0,0,W,H);
+
+    // ----- continuous asteroid stream -----
+    // Keep a steady population by trickling new rocks in from the edges at random
+    // intervals, instead of reloading a whole wave. Count large rocks toward the
+    // target so splits don't over-inflate the field.
+    const bigCount = asteroids.reduce((n,a)=> n + (a.r>46?1:0), 0);
+    const targetBig = Math.max(4, Math.round(W/360));
+    if (bigCount < targetBig && frame % randi(40,90) === 0 && asteroids.length < 22){
+      asteroids.push(spawnFromEdge(rand(40,60)));
+    }
+
+    // ----- asteroids move -----
+    for (const a of asteroids){ a.x+=a.vx; a.y+=a.vy; a.rot+=a.vrot; wrap(a); drawAsteroid(a); }
+
+    // ----- ship logic -----
+    if (ship.alive){
+      if (ship.invuln>0) ship.invuln--;
+
+      // find nearest asteroid (target) and the most threatening one (to dodge)
+      let target=null, td=Infinity, threat=null, thd=Infinity;
+      for (const a of asteroids){
+        const d = dist2(a, ship);
+        if (d < td){ td=d; target=a; }
+        const danger = d - a.r*a.r;        // closeness to surface
+        if (danger < thd){ thd=danger; threat=a; }
+      }
+      ship.target = target;
+
+      // ── Authentic Asteroids physics ──
+      // The ship can only ROTATE at a fixed rate and THRUST along its heading.
+      // It cannot strafe; momentum carries it with only the tiny friction the
+      // arcade hardware had. Max speed is capped low. The AI just decides whether
+      // to rotate left/right and whether to hold thrust — physics does the rest.
+      const TURN   = 0.052;   // radians per frame (fixed rotation speed)
+      const THRUST = 0.075;   // acceleration per frame while boosting
+      const DECAY  = 0.994;   // near-frictionless drift, like the original
+      const MAX    = 2.2;     // low top speed
+
+      // choose a heading to face: flee a close threat, else aim at the target
+      let desired;
+      const threatDist = threat ? Math.sqrt(dist2(threat,ship)) : Infinity;
+      const fleeing = threat && threatDist < 150 + threat.r;
+      if (fleeing){
+        desired = Math.atan2(ship.y-threat.y, ship.x-threat.x);   // point away
+      } else if (target){
+        desired = Math.atan2(target.y-ship.y, target.x-ship.x);   // point at rock
+      } else {
+        desired = ship.angle;
+      }
+
+      // rotate toward the desired heading at the fixed turn rate (no snapping)
+      let diff = desired - ship.angle;
+      while (diff> Math.PI) diff-=Math.PI*2; while (diff<-Math.PI) diff+=Math.PI*2;
+      if (diff >  TURN) ship.angle += TURN;
+      else if (diff < -TURN) ship.angle -= TURN;
+      else ship.angle = desired;
+
+      // thrust: boost when fleeing, or when roughly aimed and drifting too slow,
+      // with occasional procedural bursts so it wanders the whole screen
+      const speed = Math.hypot(ship.vx, ship.vy);
+      ship.wanderTimer--;
+      if (ship.wanderTimer<=0){ ship.wanderBurst = Math.random()<0.5; ship.wanderTimer = randi(50,140); }
+      ship.thrust = fleeing || (Math.abs(diff) < 1.0 && speed < 1.4) || ship.wanderBurst;
+      if (ship.thrust){
+        ship.vx += Math.cos(ship.angle)*THRUST;
+        ship.vy += Math.sin(ship.angle)*THRUST;
+      }
+
+      // momentum + light decay + speed cap
+      ship.vx *= DECAY; ship.vy *= DECAY;
+      const sp = Math.hypot(ship.vx, ship.vy);
+      if (sp>MAX){ ship.vx*=MAX/sp; ship.vy*=MAX/sp; }
+      ship.x += ship.vx; ship.y += ship.vy; wrap(ship);
+
+      // fire when well-aimed at a target and not busy fleeing
+      if (!fleeing && target && Math.abs(diff) < 0.14 && ship.cooldown<=0){ fire(); ship.cooldown = 20; }
+      if (ship.cooldown>0) ship.cooldown--;
+
+      // ship/asteroid collision -> explode
+      if (ship.invuln<=0){
+        for (const a of asteroids){
+          if (dist2(a, ship) < (a.r + ship.r*0.6)**2){ killShip(); break; }
+        }
+      }
+    } else if (!gameOver){
+      // waiting to respawn
+      respawnTimer--;
+      if (respawnTimer<=0) ship = newShip(false), ship.invuln = 90;
+    }
+
+    // ----- bullets -----
+    for (let i=bullets.length-1;i>=0;i--){
+      const b = bullets[i];
+      b.x+=b.vx; b.y+=b.vy; b.life--; wrap(b);
+      if (b.life<=0){ bullets.splice(i,1); continue; }
+      let hit=false;
+      for (const a of asteroids){
+        if (dist2(a,b) < a.r*a.r){ splitAsteroid(a); hit=true; break; }
+      }
+      if (hit){ bullets.splice(i,1); continue; }
+      // draw as a short bright streak (laser bolt) with a white-hot core so it
+      // stays visible against the checkerboard
+      const len = 9;
+      const bx = b.x - b.vx/Math.hypot(b.vx,b.vy)*len;
+      const by = b.y - b.vy/Math.hypot(b.vx,b.vy)*len;
+      ctx.lineCap = 'round';
+      // outer glow
+      ctx.beginPath(); ctx.moveTo(bx,by); ctx.lineTo(b.x,b.y);
+      ctx.strokeStyle = PINK; ctx.lineWidth = 3.5;
+      ctx.shadowColor = PINK; ctx.shadowBlur = 14; ctx.stroke();
+      // white-hot core
+      ctx.beginPath(); ctx.moveTo(bx,by); ctx.lineTo(b.x,b.y);
+      ctx.strokeStyle = '#FFFFFF'; ctx.lineWidth = 1.4;
+      ctx.shadowColor = '#FFFFFF'; ctx.shadowBlur = 6; ctx.stroke();
+      ctx.lineCap = 'butt';
+    }
+
+    // ----- particles (explosions) -----
+    for (let i=particles.length-1;i>=0;i--){
+      const p = particles[i];
+      p.x+=p.vx; p.y+=p.vy; p.vx*=0.98; p.vy*=0.98; p.life--;
+      if (p.life<=0){ particles.splice(i,1); continue; }
+      ctx.globalAlpha = Math.max(0, p.life/40);
+      ctx.fillStyle = p.color; ctx.shadowColor = p.color; ctx.shadowBlur = 6;
+      ctx.fillRect(p.x, p.y, 1.8, 1.8);
+    }
+    ctx.globalAlpha = 1;
+
+    drawShip();
+    drawHUD();
+
+    if (gameOver){
+      goTimer++;
+      drawGameOver();
+      // after the attract pause, drop a quarter and start a fresh procedural run
+      if (goTimer > 260) resetGame();
+    }
+
+    ctx.shadowBlur = 0;
+    requestAnimationFrame(step);
+  }
+
+  // respect reduced-motion preference
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  resetGame();
+  if (!reduce) requestAnimationFrame(step);
+})();
+</script>
+</body>
+</html>
