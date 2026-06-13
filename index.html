@@ -1052,13 +1052,13 @@ footer{
   </div>
 </div>
 
-<!-- WEEKLY DIGEST -->
+<!-- WEEKLY DIGEST (coming soon) -->
 <div class="digest">
   <div class="digest-title">WEEKLY DEAL DIGEST</div>
   <div class="digest-sub">THE 5 BEST PIZZA DEALS IN YOUR AREA, EVERY FRIDAY — FREE</div>
   <div class="digest-form">
-    <input class="digest-in" type="email" placeholder="YOUR@EMAIL.COM" id="digestEmail">
-    <button class="digest-btn" onclick="signupDigest()">SUBSCRIBE ▸</button>
+    <input class="digest-in" type="email" placeholder="COMING SOON" id="digestEmail" disabled>
+    <button class="digest-btn" id="digestBtn" disabled style="opacity:.55;cursor:not-allowed;">COMING SOON</button>
   </div>
   <div class="digest-perks">
     <span class="digest-perk">AI-curated top 5 deals</span>
@@ -1183,17 +1183,17 @@ footer{
       <button class="m-close" onclick="closeM('alertM')">✕</button>
     </div>
     <div class="m-body">
-      <p class="c-note" style="margin-bottom:14px;">WE'LL TEXT OR EMAIL YOU WHEN A PIZZA DEAL DROPS BELOW YOUR TARGET PRICE NEAR YOU.</p>
-      <div style="margin-bottom:10px;">
+      <p class="c-note" style="margin-bottom:14px;">SET A TARGET PRICE AND WE'LL TEXT OR EMAIL YOU WHEN A PIZZA DEAL DROPS BELOW IT NEAR YOU. THIS FEATURE IS LAUNCHING SOON.</p>
+      <div style="margin-bottom:10px;opacity:.6;">
         <div style="font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Alert me when a large drops below:</div>
         <div style="display:flex;align-items:center;gap:8px;">
           <span style="font-family:var(--font-d);font-size:28px;color:var(--pink);">$</span>
-          <input type="number" value="10" style="flex:1;padding:10px;background:var(--panel2);border:1px solid var(--border-p);color:var(--pink);font-family:var(--font-m);font-size:16px;outline:none;">
+          <input type="number" value="10" disabled style="flex:1;padding:10px;background:var(--panel2);border:1px solid var(--border-p);color:var(--pink);font-family:var(--font-m);font-size:16px;outline:none;cursor:not-allowed;">
         </div>
       </div>
-      <input class="c-in" type="email" placeholder="YOUR@EMAIL.COM">
-      <input class="c-in" type="tel" placeholder="PHONE (OPTIONAL — FOR TEXTS)">
-      <button class="btn-go" style="width:100%;padding:12px;font-size:22px;text-align:center;background:var(--pink);" onclick="closeM('alertM');toast('PRICE ALERT SET! WE\'LL NOTIFY YOU ▸')">SET ALERT ▸</button>
+      <input class="c-in" type="email" placeholder="COMING SOON" disabled style="opacity:.6;cursor:not-allowed;">
+      <input class="c-in" type="tel" placeholder="COMING SOON" disabled style="opacity:.6;cursor:not-allowed;">
+      <button class="btn-go" disabled style="width:100%;padding:12px;font-size:22px;text-align:center;background:var(--pink);opacity:.55;cursor:not-allowed;">COMING SOON</button>
     </div>
   </div>
 </div>
@@ -1550,12 +1550,23 @@ function calcCPSI() {
   document.getElementById('sliceR').textContent = s > 0 ? '$' + (p/s).toFixed(2) : '——';
 }
 
-// ── DIGEST ────────────────────────────────────────────────────────────────────
+// ── DIGEST (COMING SOON) ──────────────────────────────────────────────────────
+// The newsletter signup is intentionally disabled for the static/test deploy.
+// Collecting emails and sending a weekly digest both require a backend / email
+// service. To turn this on: wire the form to an email service (Mailchimp,
+// Buttondown, ConvertKit, Beehiiv) via their embed or API, then re-enable the
+// input + button in the HTML and restore the logic below.
 function signupDigest() {
+  // Coming-soon guard: do nothing on the live static site.
+  return;
+
+  /* --- ENABLE WHEN AN EMAIL SERVICE IS CONNECTED ---
   const v = document.getElementById('digestEmail').value.trim();
   if (!v || !v.includes('@')) { toast('ENTER A VALID EMAIL ADDRESS'); return; }
+  // POST the address to your email service / serverless endpoint here.
   document.getElementById('digestEmail').value = '';
   toast('SUBSCRIBED! FIRST DIGEST ARRIVES THIS FRIDAY ▸');
+  --- END ENABLE BLOCK --- */
 }
 
 // ── TOAST ─────────────────────────────────────────────────────────────────────
