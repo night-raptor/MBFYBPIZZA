@@ -45,15 +45,15 @@ body::before{
   z-index:9999;
 }
 
-/* ── ASTEROIDS BACKGROUND ── */
+/* ── ASTEROIDS BACKGROUND (constrained to the hero box, like an arcade screen) ── */
 #asteroids-bg{
-  position:fixed;
+  position:absolute;
   inset:0;
   width:100%;
   height:100%;
   z-index:0;
   pointer-events:none;
-  opacity:.62;
+  opacity:.7;
 }
 /* keep all real content above the game layer */
 .marquee,header,.hero,.filter-bar,.main,.calc-strip,.digest,footer,.overlay,.toast{
@@ -63,6 +63,8 @@ body::before{
 header{z-index:100;}
 .overlay{z-index:500;}
 .toast{z-index:999;}
+/* hero content sits above the game canvas */
+.hero-eyebrow,.hero-title,.hero-sub,.search-wrap,.gps-hint{position:relative;z-index:2;}
 
 /* ── MARQUEE ── */
 .marquee{
@@ -134,6 +136,7 @@ header{
     repeating-conic-gradient(rgba(19,19,32,.72) 0% 25%,rgba(12,12,24,.72) 0% 50%)
     0 0/40px 40px;
   padding:52px 28px 44px;
+  min-height:340px;
   text-align:center;
   position:relative;
   overflow:hidden;
@@ -746,20 +749,97 @@ footer{
 @keyframes slideIn{from{transform:translateX(40px);opacity:0;}to{transform:translateX(0);opacity:1;}}
 
 /* responsive */
-@media(max-width:768px){
+/* ── TABLET ── */
+@media(max-width:900px){
   .main{grid-template-columns:1fr;}
-  .sidebar{display:none;}
-  .card{grid-template-columns:36px 1fr auto;}
+  /* show the sidebar BELOW the deals instead of hiding it, so mobile users
+     still get rewards tracking, settings, and Deal-Bot */
+  .sidebar{order:2;}
+  .deals-area{order:1;}
+}
+
+/* ── MOBILE ── */
+@media(max-width:768px){
+  /* header: shrink the long title so it fits, keep buttons reachable */
+  header{padding:0 14px;height:54px;gap:8px;}
+  .logo{font-size:19px;line-height:1;letter-spacing:.02em;}
+  .hdr-btns{gap:6px;flex-shrink:0;}
+  .hbtn{font-size:13px;padding:6px 9px;}
+
+  .marquee{font-size:14px;}
+
+  /* hero / title */
+  .hero{padding:32px 16px 28px;}
+  .hero-eyebrow{font-size:9px;letter-spacing:.12em;}
+  .hero-title{font-size:clamp(40px,13vw,64px);}
+  .hero-sub{font-size:11px;}
+
+  /* search stacks vertically so each control is full-width and tappable */
+  .search-wrap{flex-wrap:wrap;}
+  .search-in{flex:1 1 100%;text-align:center;padding:14px;font-size:16px;}
+  .gps-btn{flex:1 1 40%;justify-content:center;padding:13px;border-left:none;border-top:1px solid rgba(0,207,255,.2);font-size:20px;}
+  .search-btn{flex:1 1 55%;padding:13px;border-top:1px solid rgba(0,207,255,.2);}
+
+  /* filter bar scrolls horizontally, left-aligned for thumb scrolling */
+  .filter-bar{justify-content:flex-start;flex-wrap:nowrap;padding:0 10px;}
+  .ftab{padding:12px 12px;font-size:11px;}
+  .sort-sel{margin:6px 4px 6px auto;}
+
+  .main{padding:16px 12px;gap:16px;}
+
+  /* deal cards: drop the side action buttons, tap the card to open details */
+  .card{grid-template-columns:30px 1fr auto;gap:10px;padding:12px;}
   .c-btns{display:none;}
-  .best-banner{flex-wrap:wrap;}
+  .rank{font-size:24px;}
+  .c-place{font-size:17px;}
+  .c-price{font-size:24px;}
+
+  /* best-deal banner stacks cleanly */
+  .best-banner{flex-wrap:wrap;gap:10px;padding:14px;}
   .best-banner::after{display:none;}
+  .best-name{font-size:22px;}
+  .best-price{font-size:36px;}
+  .best-price-col{margin-left:0;}
+  .btn-order{width:100%;padding:12px;}
+
+  /* CPSI calculator: inputs go full width and stack */
+  .calc-strip{padding:24px 16px;}
+  .calc-title{font-size:22px;}
+  .calc-row{flex-direction:column;align-items:stretch;gap:10px;}
+  .calc-field{width:100%;}
+  .calc-in{width:100%;font-size:16px;}
+  .calc-readout{flex-direction:column;gap:12px;width:100%;min-width:0;}
+
+  /* weekly digest */
+  .digest{padding:28px 16px;}
+  .digest-title{font-size:26px;}
+  .digest-form{flex-wrap:wrap;}
+  .digest-in{flex:1 1 100%;text-align:center;font-size:16px;}
+  .digest-btn{flex:1 1 100%;border-top:1px solid var(--pink);}
+  .digest-perks{flex-direction:column;gap:6px;}
+
+  /* modals fill more of the small screen and don't overflow */
+  .overlay{padding:12px;}
+  .modal{max-width:100%;}
+  .m-title{font-size:22px;}
+  .m-price{font-size:26px;}
+
+  /* footer links wrap with breathing room */
+  .footer-links{gap:12px 16px;}
+
+  /* dim the background game a touch more so text stays crisp on small screens */
+  #asteroids-bg{opacity:.42;}
+}
+
+/* ── SMALL PHONES ── */
+@media(max-width:380px){
+  .logo{font-size:16px;}
+  .hbtn{font-size:11px;padding:5px 7px;}
+  .hero-title{font-size:clamp(34px,12vw,52px);}
 }
 </style>
 </head>
 <body>
-
-<!-- ASTEROIDS BACKGROUND GAME -->
-<canvas id="asteroids-bg"></canvas>
 
 <!-- MARQUEE -->
 <div class="marquee">
@@ -780,6 +860,8 @@ footer{
 
 <!-- HERO -->
 <div class="hero">
+  <!-- ASTEROIDS BACKGROUND GAME (constrained to this hero box) -->
+  <canvas id="asteroids-bg"></canvas>
   <div class="hero-eyebrow">▸ REAL-TIME PRICES · CHAINS + LOCAL SPOTS · RANKED BY VALUE ◂</div>
   <h1 class="hero-title">
     <span class="l1">MORE BANG</span>
@@ -899,7 +981,7 @@ footer{
   </div>
 
   <!-- DEALS AREA -->
-  <div>
+  <div class="deals-area">
     <div class="deals-hdr">
       <div class="deals-hdr-l">SHOWING <strong id="dealCount">8</strong> DEALS NEAR <strong id="dealLoc">— SET YOUR LOCATION —</strong></div>
       <div class="live-badge">PRICES LIVE</div>
@@ -1605,7 +1687,9 @@ function useGPS() {
 
   function resize(){
     dpr = Math.min(window.devicePixelRatio || 1, 2);
-    W = window.innerWidth; H = window.innerHeight;
+    // size to the hero box (the canvas's parent), not the whole window
+    const box = canvas.parentElement.getBoundingClientRect();
+    W = Math.max(200, box.width); H = Math.max(120, box.height);
     canvas.width = W * dpr; canvas.height = H * dpr;
     canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -1646,7 +1730,7 @@ function useGPS() {
   // Spawn a single asteroid drifting in from just off a random screen edge,
   // heading roughly across the screen — used to keep a continuous stream.
   function spawnFromEdge(r){
-    r = r || rand(36,60);
+    r = r || rand(22,38);
     const edge = randi(0,3);
     let x, y, dir;
     if (edge===0){ x=rand(0,W); y=-r;     dir=rand(Math.PI*0.25, Math.PI*0.75); }     // top → down
@@ -1654,7 +1738,7 @@ function useGPS() {
     else if (edge===2){ x=rand(0,W); y=H+r; dir=rand(Math.PI*1.25, Math.PI*1.75); }    // bottom → up
     else { x=-r; y=rand(0,H); dir=rand(-Math.PI*0.25, Math.PI*0.25); }                  // left → right
     const a = makeAsteroid(x, y, r);
-    const spd = rand(0.18, 0.42) * (50/r + 0.5);
+    const spd = rand(0.18, 0.42) * (40/r + 0.5);
     a.vx = Math.cos(dir)*spd; a.vy = Math.sin(dir)*spd;
     return a;
   }
@@ -1662,11 +1746,11 @@ function useGPS() {
   // Initial field: scatter a few already on-screen, away from the ship.
   function seedAsteroids(){
     asteroids = [];
-    const count = randi(4, Math.max(5, Math.round(W/320)));
+    const count = randi(3, Math.max(4, Math.round(W/260)));
     for (let i=0;i<count;i++){
       let a;
-      do { a = makeAsteroid(undefined, undefined, rand(36,60)); }
-      while (ship && dist2(a, ship) < (200*200));
+      do { a = makeAsteroid(undefined, undefined, rand(22,38)); }
+      while (ship && dist2(a, ship) < (120*120));
       asteroids.push(a);
     }
   }
@@ -1675,10 +1759,10 @@ function useGPS() {
     const idx = asteroids.indexOf(a);
     if (idx>-1) asteroids.splice(idx,1);
     // arcade scoring: large 20, medium 50, small 100
-    score += a.r > 46 ? 20 : a.r > 28 ? 50 : 100;
+    score += a.r > 30 ? 20 : a.r > 18 ? 50 : 100;
     explode(a.x, a.y, a.r, BLUE, Math.round(a.r/3));
     // large and medium split into exactly TWO smaller rocks; small ones vanish
-    if (a.r > 24){
+    if (a.r > 15){
       const nr = a.r * 0.55;
       // two pieces fly apart at opposite angles from the parent's heading
       const base = Math.atan2(a.vy, a.vx);
@@ -1699,7 +1783,7 @@ function useGPS() {
     return {
       x: center ? W*0.5 : rand(W*0.2, W*0.8),
       y: center ? H*0.5 : rand(H*0.2, H*0.8),
-      vx: 0, vy: 0, angle: rand(0,Math.PI*2), r: 16,
+      vx: 0, vy: 0, angle: rand(0,Math.PI*2), r: 12,
       cooldown: 0, target: null, thrust: false, alive: true,
       wanderBurst: false, wanderTimer: 0, invuln: 90
     };
@@ -1811,39 +1895,39 @@ function useGPS() {
 
   function drawHUD(){
     ctx.save();
-    // HUD sits well below the sticky header/marquee so it isn't hidden
-    const hudY = 150;
+    // HUD near the top-left of the hero box
+    const hudY = 20;
     ctx.shadowColor = BLUE; ctx.shadowBlur = 6;
     ctx.fillStyle = BLUE;
-    ctx.font = "26px 'VT323', monospace";
+    ctx.font = "20px 'VT323', monospace";
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
     // score
-    ctx.fillText('SCORE ' + String(score).padStart(5,'0'), 24, hudY);
+    ctx.fillText('SCORE ' + String(score).padStart(5,'0'), 16, hudY);
     // lives as little pizza ships, on the same line to the right of the score
     const scoreW = ctx.measureText('SCORE ' + String(score).padStart(5,'0')).width;
-    let lx = 24 + scoreW + 26;
-    for (let i=0;i<lives;i++){ drawLifeIcon(lx, hudY, 9); lx += 24; }
+    let lx = 16 + scoreW + 22;
+    for (let i=0;i<lives;i++){ drawLifeIcon(lx, hudY, 7); lx += 20; }
     ctx.restore();
     return hudY;
   }
 
   function drawGameOver(){
     ctx.save();
-    const hudY = 150;
+    const hudY = 20;
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
     // GAME OVER + final score, directly under the HUD line
     ctx.shadowColor = BLUE; ctx.shadowBlur = 8;
     ctx.fillStyle = BLUE;
-    ctx.font = "24px 'VT323', monospace";
-    ctx.fillText('GAME OVER  \u2014  SCORE ' + String(score).padStart(5,'0'), 24, hudY + 34);
+    ctx.font = "18px 'VT323', monospace";
+    ctx.fillText('GAME OVER  \u2014  SCORE ' + String(score).padStart(5,'0'), 16, hudY + 26);
     // blinking INSERT 25¢ just beneath that, like the arcade attract screen
     if (Math.floor(goTimer/30)%2===0){
       ctx.shadowColor = PINK; ctx.shadowBlur = 12;
       ctx.fillStyle = PINK;
-      ctx.font = "40px 'VT323', monospace";
-      ctx.fillText('INSERT 25\u00A2', 24, hudY + 76);
+      ctx.font = "30px 'VT323', monospace";
+      ctx.fillText('INSERT 25\u00A2', 16, hudY + 58);
     }
     ctx.restore();
   }
@@ -1857,10 +1941,10 @@ function useGPS() {
     // Keep a steady population by trickling new rocks in from the edges at random
     // intervals, instead of reloading a whole wave. Count large rocks toward the
     // target so splits don't over-inflate the field.
-    const bigCount = asteroids.reduce((n,a)=> n + (a.r>46?1:0), 0);
-    const targetBig = Math.max(4, Math.round(W/360));
-    if (bigCount < targetBig && frame % randi(40,90) === 0 && asteroids.length < 22){
-      asteroids.push(spawnFromEdge(rand(40,60)));
+    const bigCount = asteroids.reduce((n,a)=> n + (a.r>30?1:0), 0);
+    const targetBig = Math.max(3, Math.round(W/280));
+    if (bigCount < targetBig && frame % randi(40,90) === 0 && asteroids.length < 18){
+      asteroids.push(spawnFromEdge(rand(26,38)));
     }
 
     // ----- asteroids move -----
